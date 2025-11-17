@@ -15,5 +15,5 @@ The initial vector comes in a ZIP file, named in Russian as:
 The ZIP file contains an LNK file named Перерасчет заработной платы 01.10.2025.lnk. Analysis shows that its sole purpose is to invoke rundll32.exe to load and execute the malicious payload adobe.dll, which is a .NET-based DLL implant.
 
 ## .NET Reconnaissance
-![alt text](/assets/Post_1/pe.png)
+![alt text](/assets/img/Post_1/pe.png)
 
