@@ -1,5 +1,5 @@
 ---
-title: "CAPI Backdoor: .NET Stealer Targeting Russian Auto-Commerce"
+title: "Seqrite CAPI Backdoor: .NET Stealer Targeting Russian Auto-Commerce"
 date: 2025-11-17 14:00:00 -0300
 layout: post
 categories: [Malware]
@@ -159,7 +159,7 @@ If any critical heuristic is detected, the malware may alter its behavior or sto
 ### ReceiveFile()
 ![alt text](/assets/img/Post_1/receivefile.png)
 
-This function performs **reverse exfiltration** — allowing the operator to upload data to the victim. 
+This function performs **reverse exfiltration** — allowing the operator to send data from the victim.
 It reads bytes from `Client._stream` until it finds a delimiter marker. After identifying the marker, the content is written to `fileName`, the marker is removed, and the malware responds with "File Saved!". 
 It is used to inject additional modules, update payloads, or install add-ons.
 
