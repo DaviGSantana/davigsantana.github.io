@@ -21,18 +21,18 @@ The PE metadata immediately confirms that the sample is a .NET assembly, allowin
 
 ## Analyze Functions
 Now, upon analyzing the binary, we identified a robust set of functionalities implemented within the .NET implant known as **CAPI Backdoor**. Each mapped function reveals a specific operational behavior, forming the complete architecture for data collection, persistence, environment detection, and communication with the command and control server.
-![alt text](/assets/img/functions.png)
+![alt text](/assets/img/Post_1/functions.png)
 Next, we will analyze the functions
 
 ### connect()
-![alt text](/assets/img/connect.png)
+![alt text](/assets/img/Post_1/connect.png)
 
 This function establishes the initial connection with the Command and Control (C2) server.
 The routine uses a `TcpClient` to attempt to connect to the remote address defined by the operator, usually over port **443**, simulating legitimate HTTPS traffic. 
 Once connected, the function initializes the communication stream (`NetworkStream`) that will be used to send and receive instructions. This is the core of the backdoor communication: without `connect()`, no other remote functionality can be triggered.
 
 ### av()
-![alt text](/assets/img/av.png)
+![alt text](/assets/img/Post_1/av.png)
 
 The `av()` function lists all antivirus programs installed on the compromised machine. 
 To do this, it queries WMI, specifically the class:
@@ -46,13 +46,13 @@ This information is compiled and sent to the C2, allowing the operator to adjust
 The three functions act as **browser data stealers**, each focusing on a specific type of profile.
 
 #### dump1()
-![alt text](/assets/img/dump1.png)
+![alt text](/assets/img/Post_1/dump1.png)
 
 Creates a directory with a timestamp (e.g., `edprofile_20231117183000`) and tries to copy sensitive artifacts from the **Edge/Chromium** browser, including files like *Local State*, which contain the DPAPI-encrypted key used to protect passwords and cookies.
 All collected files are compressed into **edprofile.zip** and sent to C2.
 
 #### dump2()
-![alt text](/assets/img/dump2.png)
+![alt text](/assets/img/Post_1/dump2.png)
 
 Performs a similar procedure, but this time targeting **Chrome** profiles.
 The copied items include:
@@ -64,7 +64,7 @@ The copied items include:
 - Installed extensions
 
 #### dump3()
-![alt text](/assets/img/dump3.png)
+![alt text](/assets/img/Post_1/dump3.png)
 
 Locates **Firefox** profiles and collects files such as:
 - profiles.ini
@@ -76,7 +76,7 @@ Locates **Firefox** profiles and collects files such as:
 These data are packaged in **ffprofile_safe.zip** and sent to the C2.
 
 ### persiste1()
-![alt text](/assets/img/persiste1.png)
+![alt text](/assets/img/Post_1/persiste1.png)
 
 This function establishes persistence via **LOLBIN + LNK**. 
 First, it obtains the current DLL location with `GetExecutingAssembly().Location`, then copies the file to:
@@ -90,7 +90,7 @@ Then create a **Microsoft.lnk** shortcut inside the user's Startup folder:
 Thus, every Windows startup runs the backdoor again.
 
 ### persiste2()
-![alt text](/assets/img/persiste2.png)
+![alt text](/assets/img/Post_1/persiste2.png)
 
 Creates additional persistence via Task Scheduler.
 The flow is:
@@ -107,14 +107,14 @@ C:\Windows\System32\rundll32.exe file.dll
 This way, even if the LNK is removed, the malware will continue to run periodically.
 
 ### ReceiveCommands()
-![alt text](/assets/img/receivecommands.png)
+![alt text](/assets/img/Post_1/receivecommands.png)
 
 This function is responsible for **receiving raw commands from the C2**.
 The method reads bytes directly from the `NetworkStream`, stores them in a buffer, and converts the content to a string after normalizing the data.
 The result is a sequence of instructions that will be interpreted by `ExecuteCommands()`.
 
 ### ExecuteCommands()
-![alt text](/assets/img/executecommands.png)
+![alt text](/assets/img/Post_1/executecommands.png)
 
 This is where the operational logic of the malware occurs. 
 Each command sent by the C2 is translated into a specific action, such as:
@@ -131,14 +131,14 @@ Each command sent by the C2 is translated into a specific action, such as:
 It is the operational brain of the backdoor, implementing everything the attacker requests.
 
 ### screen()
-![alt text](/assets/img/screen.png)
+![alt text](/assets/img/Post_1/screen.png)
 
 Captures a screenshot of the user's current screen in real time. 
 The method uses the .NET graphics API to capture the screen surface, inserts a timestamp into the content, and converts the image to **PNG**, which is then sent to the C2 server. 
 This feature is extremely useful for passive monitoring, spying, and viewing user activity.
 
 ### IsLikelyVm()
-![alt text](/assets/img/islikelyvm.png)
+![alt text](/assets/img/Post_1/islikelyvm.png)
 
 Function dedicated to **virtualized environment fingerprinting**. 
 It executes a set of heuristics to determine if the sample is being analyzed in a lab environment.
@@ -157,7 +157,7 @@ The checks include:
 If any critical heuristic is detected, the malware may alter its behavior or stop operations.
 
 ### ReceiveFile()
-![alt text](/assets/img/receivefile.png)
+![alt text](/assets/img/Post_1/receivefile.png)
 
 This function performs **reverse exfiltration** — allowing the operator to upload data to the victim. 
 It reads bytes from `Client._stream` until it finds a delimiter marker. After identifying the marker, the content is written to `fileName`, the marker is removed, and the malware responds with "File Saved!". 
