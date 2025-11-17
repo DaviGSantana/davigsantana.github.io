@@ -1,9 +1,9 @@
 ---
-title: "Analysis of Trojanized NordVPN Setup: Beginner Malware Sample"
+title: "Analysis of Trojanized NordVPN Setup: Beginner Malware Sample"
 date: 2025-11-17 18:00:00 -0300
 layout: post
 categories: [Malware]
-tags: [reverse, malware‑analysis]
+tags: [reverse, malware-analysis]
 image: "/assets/img/Post_2/nordvpn-header.jpg"
 ---
 
