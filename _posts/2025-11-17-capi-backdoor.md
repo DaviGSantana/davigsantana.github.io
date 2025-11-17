@@ -167,5 +167,5 @@ It is used to inject additional modules, update payloads, or install add-ons.
 
 ## Conclusion
 
-These are some of the most relevant features of the CAPI Backdoor observed during the analysis of the sample. 
+These are some of the most relevant features of the Seqrite CAPI Backdoor observed during the analysis of the sample. 
 They make up a mature, modular backdoor focused on information gathering, resilient persistence, and evasion of analysis environments.
