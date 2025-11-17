@@ -14,3 +14,4 @@ The initial vector comes in a ZIP file, named in Russian as:
 ```
 Перерасчёт заработной платы 01.10.2025.zip
 ```
+## Binary Reconnaissance
