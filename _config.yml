@@ -57,7 +57,7 @@ pageviews:
   provider:
 
 cdn:
-avatar:
+avatar: /assets/img/avatar.png
 social_preview_image:
 
 toc: true
