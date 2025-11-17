@@ -8,8 +8,8 @@ theme_mode: dark
 lang: en
 timezone: America/Sao_Paulo
 
-title: Davi Security Research
-tagline: Malware Analysis • Reverse Engineering • Cybersecurity
+title: Davi Santana
+tagline: Malware Analysis • Reverse Engineering • Exploit Developer
 
 description: >-
   Research, analyses and documentation of malware, exploits and cyber operations.
