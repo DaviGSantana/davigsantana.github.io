@@ -18,7 +18,7 @@ Recently, a malicious installer disguised as the legitimate NordVPN setup has be
 The file analysis in Detect It Easy (DIE) shows that the binary is a PE64 for AMD64, compiled in C++ with Microsoft Visual Studio 2022 (v17.6). The use of a GUI subsystem reinforces that it is trying to pass itself off as a legitimate installer.
 
 Important points:
-´´´
+```
  - Format: PE64, AMD64 architecture
  - Compiled in: Microsoft Visual Studio 2022 (v17.6)
  - Language: C++ (no apparent obfuscation)
@@ -28,7 +28,7 @@ Important points:
  - Authenticode signature detected, but not trusted: strong indication of tampering
  - Large overlay (~2.8MB): common in trojanized installers containing additional payload
  - Duplicated PE resources (GUI + DLL): indicates that more than one component is embedded
-´´´
+```
 
 ## Initial Execution
 
@@ -46,9 +46,9 @@ The `onWebBrowserNavigated()` method performs the following:
 ### **2. Execution of the `run()` Routine**
 Once the UI is hidden, the code invokes:
 
-´´´
+```
  await run();
-´´´
+```
 This marks the beginning of the malicious flow.
 
 ---
@@ -61,9 +61,9 @@ The `run()` method performs two actions:
 
 ### **1. Downloads the Fake Installer**
 It retrieves a remote file defined in `DownloadLink` and saves it locally as:
-´´´
+```
  https://downloads.nordcdn.com/apps/windows/NordVPN/lastest/NordInstaller.exe
-´´´
+```
 
 
 ### **2. Executes the Downloaded File**
@@ -71,9 +71,9 @@ After downloading:
 
 - The file is executed normally
 - The malware then calls:
-´´´
+```
  Installer.run();
-´´´
+```
 
 This is where the malicious behavior starts.
 
@@ -97,9 +97,9 @@ A random GUID is appended to give the task a legitimate update-service look.
 ### **2. Cleanup of Previous Tasks**
 It deletes any existing scheduled task with the same name:
 
-´´´
+```
  DeleteTask();
-´´´
+```
 
 No exception is thrown if the task doesn't exist.
 
@@ -113,10 +113,10 @@ The malware:
 ### **4. Persistence Configuration**
 The repetition pattern is:
 
-´´´
+```
 Every 30 minutes
 For 365 days
-´´´
+```
 
 This ensures long-term presence even if the user restarts the system or deletes the fake installer.
 
@@ -128,9 +128,9 @@ Inside `installer.run()`, the malware contains encrypted command strings which a
 
 The decryption logic is located in:
 
-´´´
+```
 UnloadString();
-´´´
+```
 
 ![alt text](/assets/img/Post_2/unloadString.png)
 
@@ -145,16 +145,16 @@ The sample uses a **fixed key and IV**, making the encryption purely cosmetic an
 ```csharp
     private static byte[] k1 = (from x in Enumerable.Range(1, 32)
         select (byte)x).ToArray();
-´´´
+```
 
 A simple byte sequence from 1 to 32.
 
 ### **IV (k1)**
 
-´´´csharp
-    private static byte[] k2 = (from x in Enumerable.Range(1, 16)
-        select (byte)x).ToArray();
-´´´
+```csharp
+private static byte[] k2 = (from x in Enumerable.Range(1, 16)
+    select (byte)x).ToArray();
+```
 
 A sequence from 1 to 16.
 
@@ -164,9 +164,9 @@ Both keys are static and predictable, indicating low sophistication.
 
 The decrypted command launches:
 
-´´´
+```
 mshta.exe
-´´´
+```
 
 This is significant — mshta is a LOLBIN frequently used for remote code execution, allowing the attacker to execute HTML Application (HTA) malware.
 
