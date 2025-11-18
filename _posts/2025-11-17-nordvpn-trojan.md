@@ -134,7 +134,8 @@ The decryption logic is located in:
 ´´´
 UnloadString();
 ´´´
-![alt text](/assets/img/Post_2/unloadstring.png)
+
+![alt text](/assets/img/Post_2/unloadString.png)
 
 The sample uses a **fixed key and IV**, making the encryption purely cosmetic and easily reversible.
 
@@ -146,6 +147,7 @@ The sample uses a **fixed key and IV**, making the encryption purely cosmetic an
 ```csharp
 private static byte[] k1 = (from x in Enumerable.Range(1, 32)
     select (byte)x).ToArray();
+´´´
 
 A simple byte sequence from 1 to 32.
 
@@ -153,6 +155,7 @@ A simple byte sequence from 1 to 32.
 ´´´csharp
 private static byte[] k2 = (from x in Enumerable.Range(1, 16)
     select (byte)x).ToArray();
+´´´
 A sequence from 1 to 16.
 
 Both keys are static and predictable, indicating low sophistication.
