@@ -149,7 +149,7 @@ The sample uses a **fixed key and IV**, making the encryption purely cosmetic an
 
 A simple byte sequence from 1 to 32.
 
-### **IV (k1)**
+### **IV (k2)**
 
 ```csharp
 private static byte[] k2 = (from x in Enumerable.Range(1, 16)
