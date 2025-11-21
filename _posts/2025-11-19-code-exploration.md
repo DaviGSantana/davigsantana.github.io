@@ -4,7 +4,7 @@ date: 2025-11-20 17:00:00 -0300
 layout: post
 categories: [Debuggers]
 tags: [reverse, exploit-development, windows-internals]
-image: "/assets/img/Post_4/seh.jpg"
+image: "/assets/img/Post_4/seh.png"
 ---
 
 ## Introduction
