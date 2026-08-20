@@ -53,7 +53,6 @@ social:
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.png
 
 avatar:
   img: /img/butterfly-icon.png
@@ -286,9 +285,9 @@ aside:
     description:
     button:
       enable: true
-      icon: fab fa-github
+      icon: fab fa-linkedin
       text: Follow Me
-      link: https://github.com/xxxxxx
+      link: https://linkedin.com/in/davigsantana
   card_announcement:
     enable: true
     content: This is my Blog

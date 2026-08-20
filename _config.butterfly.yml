@@ -49,20 +49,17 @@ code_blocks:
 # Formal:
 #   icon: link || the description || color
 social:
-  fab fa-github: https://github.com/profzzor || Github
-  fab fa-x-twitter: https://x.com/Profzzr || X
-  fab fa-youtube: https://youtube.com/@Profzzor || YouTube
-  fab fa-twitch: https://twitch.tv/profzzor || Twitch
-  # fas fa-envelope: mailto:xxxxxx@gmail.com || Email || '#4a7dbe'
+  fab fa-github: https://github.com/DaviGSantana || Github
+  fab fa-linkedin: https://www.linkedin.com/in/davigsantana || LinkedIn
+  
 
 # --------------------------------------
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.ico
 
 avatar:
-  img: /img/profile.png
+  img: /img/avatar.gif
   effect: false
 
 # Disable all banner images
@@ -211,18 +208,6 @@ post_copyright:
   license: CC BY-NC-SA 4.0
   license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-# Sponsor/reward
-reward:
-  enable: true
-  text:
-  QR_code:
-    - img: 
-      link: https://paypal.me/abishg24
-      text: Support Me
-    # - img: /img/alipay.jpg
-    #   link:
-    #   text: alipay
-
 # Post edit
 # Easily browse and edit blog source code online.
 post_edit:
@@ -289,15 +274,10 @@ aside:
     category: true
   card_author:
     enable: true
-    description: Defensive
-    button:
-      enable: true
-      icon: fab fa-paypal
-      text: Support Me
-      link: https://paypal.me/abishg24
+    description: Malware | Reverse Engineering | Exploit Development   
   card_announcement:
     enable: true
-    content: "I am currently seeking new job opportunities. If you know of any roles that align with my skills and experience, please feel free to connect. Thank you for your support."
+    content: "Research, analyses and documentation of malware, exploits and cyber operations."
   card_recent_post:
     enable: true
     # If set 0 will show all
