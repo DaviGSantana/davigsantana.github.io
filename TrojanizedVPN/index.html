@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Trojanized VPN Installer Delivering Malware | Zykrav - Blog</title><meta name="author" content="Davi Santana"><meta name="copyright" content="Davi Santana"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Malicious installer disguised as the legitimate NordVPN setup has been circulating online, targeting unsuspecting users.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Trojanized VPN Installer Delivering Malware">
+<meta property="og:url" content="https://davigstana.github.io/TrojanizedVPN/index.html">
+<meta property="og:site_name" content="Zykrav - Blog">
+<meta property="og:description" content="Malicious installer disguised as the legitimate NordVPN setup has been circulating online, targeting unsuspecting users.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://davigstana.github.io/TrojanizedVPN/cover.jpg">
+<meta property="article:published_time" content="2026-08-20T21:50:03.551Z">
+<meta property="article:modified_time" content="2026-08-20T21:50:03.551Z">
+<meta property="article:author" content="Davi Santana">
+<meta property="article:tag" content="Trojan">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://davigstana.github.io/TrojanizedVPN/cover.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Trojanized VPN Installer Delivering Malware",
+  "url": "https://davigstana.github.io/TrojanizedVPN/",
+  "image": "https://davigstana.github.io/TrojanizedVPN/cover.jpg",
+  "datePublished": "2026-08-20T21:50:03.551Z",
+  "dateModified": "2026-08-20T21:50:03.551Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Davi Santana",
+      "url": "https://davigstana.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://davigstana.github.io/TrojanizedVPN/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><meta name="google-site-verification" content="nhQl74qB5kTasevDkFUKXJdPMWL-84-KgUzefAFlybM"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7808274774731635" crossorigin="anonymous"></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-921QF8PHT5"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-921QF8PHT5')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-921QF8PHT5', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"You have switched to Traditional Chinese","cht_to_chs":"You have switched to Simplified Chinese","day_to_night":"You have switched to Dark Mode","night_to_day":"You have switched to Light Mode","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-center"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: true,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Trojanized VPN Installer Delivering Malware',
+  isHighlightShrink: undefined,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 8.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Zykrav - Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Trojanized VPN Installer Delivering Malware</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Trojanized VPN Installer Delivering Malware</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2026-08-20T21:50:03.551Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Malware-Analysis/">Malware Analysis</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>4mins</span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="1-1-Introduction"><a href="#1-1-Introduction" class="headerlink" title="1.1 Introduction"></a>1.1 Introduction</h2><p>Recently, a malicious installer disguised as the legitimate NordVPN setup has been circulating online, targeting unsuspecting users. This example demonstrates typical behaviors of beginner-level malware, including persistence, basic data collection, and communication with a command and control (C2) server. In this analysis, we will dissect the malware’s internal operations, explore its installation vector, and examine its main functionalities to understand how it compromises a system.</p>
+<h2 id="2-1-PE-Analysis"><a href="#2-1-PE-Analysis" class="headerlink" title="2.1 PE Analysis"></a>2.1 PE Analysis</h2><p><img src="/TrojanizedVPN/die.png" alt="alt text"></p>
+<p>The file analysis in Detect It Easy (DIE) shows that the binary is a PE64 for AMD64, compiled in C++ with Microsoft Visual Studio 2022 (v17.6). The use of a GUI subsystem reinforces that it is trying to pass itself off as a legitimate installer.</p>
+<p>Important points:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- Format: PE64, AMD64 architecture</span><br><span class="line">- Compiled in: Microsoft Visual Studio 2022 (v17.6)</span><br><span class="line">- Language: C++ (no apparent obfuscation)</span><br><span class="line">- Subsystem: GUI – emphasizes that it tries to appear as a legitimate installer</span><br><span class="line">- Linker: 14.36 (recent, standard for modern builds)</span><br><span class="line">- PDB path present: indicates a careless build → typical of beginner malware</span><br><span class="line">- Authenticode signature detected, but not trusted: strong indication of tampering</span><br><span class="line">- Large overlay (~2.8MB): common in trojanized installers containing additional payload</span><br><span class="line">- Duplicated PE resources (GUI + DLL): indicates that more than one component is embedded</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-1-Initial-Execution"><a href="#3-1-Initial-Execution" class="headerlink" title="3.1 Initial Execution"></a>3.1 Initial Execution</h2><p>Once executed, the program loads a standard user interface through a browser component, mimicking a legitimate installer interface.</p>
+<p><img src="/TrojanizedVPN/onwebbrowsernavigated.png" alt="alt text"></p>
+<p>The <code>onWebBrowserNavigated()</code> method performs the following:</p>
+<h3 id="3-1-1-URL-Validation-and-UI-Handling"><a href="#3-1-1-URL-Validation-and-UI-Handling" class="headerlink" title="3.1.1 URL Validation and UI Handling"></a>3.1.1 URL Validation and UI Handling</h3><ul>
+<li>Checks if the displayed URL is valid.</li>
+<li>Immediately hides the browser interface by setting its visibility to <code>false</code> to avoid user suspicion.</li>
+</ul>
+<h3 id="3-1-2-Execution-of-the-run-Routine"><a href="#3-1-2-Execution-of-the-run-Routine" class="headerlink" title="3.1.2 Execution of the run() Routine"></a>3.1.2 Execution of the <code>run()</code> Routine</h3><p>Once the UI is hidden, the code invokes:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">await run();</span><br></pre></td></tr></table></figure>
+<p>This marks the beginning of the malicious flow.</p>
+<hr>
+<h2 id="4-1-The-run-Routine"><a href="#4-1-The-run-Routine" class="headerlink" title="4.1 The run() Routine"></a>4.1 The <code>run()</code> Routine</h2><p><img src="/TrojanizedVPN/installerRun.png" alt="alt text"></p>
+<p>The <code>run()</code> method performs two actions:</p>
+<h3 id="4-1-1-Downloads-the-Fake-Installer"><a href="#4-1-1-Downloads-the-Fake-Installer" class="headerlink" title="4.1.1 Downloads the Fake Installer"></a>4.1.1 Downloads the Fake Installer</h3><p>It retrieves a remote file defined in <code>DownloadLink</code> and saves it locally as:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://downloads.nordcdn.com/apps/windows/NordVPN/lastest/NordInstaller.exe</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="4-1-2-Executes-the-Downloaded-File"><a href="#4-1-2-Executes-the-Downloaded-File" class="headerlink" title="4.1.2 Executes the Downloaded File"></a>4.1.2 Executes the Downloaded File</h3><p>After downloading:</p>
+<ul>
+<li>The file is executed normally</li>
+<li>The malware then calls:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Installer.run();</span><br></pre></td></tr></table></figure>
+
+<p>This is where the malicious behavior starts.</p>
+<hr>
+<h2 id="5-1-Malicious-Behavior-installer-run"><a href="#5-1-Malicious-Behavior-installer-run" class="headerlink" title="5.1 Malicious Behavior: installer.run()"></a>5.1 Malicious Behavior: <code>installer.run()</code></h2><p>This is the core of the trojan.</p>
+<p>The function begins creating an <strong>Edge Update Service task</strong> — a common social engineering trick to hide in plain sight.</p>
+<hr>
+<h2 id="6-1-Creating-a-Fake-“Edge-Update-Service”-Task"><a href="#6-1-Creating-a-Fake-“Edge-Update-Service”-Task" class="headerlink" title="6.1 Creating a Fake “Edge Update Service” Task"></a>6.1 Creating a Fake “Edge Update Service” Task</h2><p><img src="/TrojanizedVPN/installerRun.png" alt="alt text"></p>
+<h3 id="6-1-1-Task-Name-With-GUID"><a href="#6-1-1-Task-Name-With-GUID" class="headerlink" title="6.1.1 Task Name With GUID"></a>6.1.1 Task Name With GUID</h3><p>A random GUID is appended to give the task a legitimate update-service look.</p>
+<h3 id="6-1-2-Cleanup-of-Previous-Tasks"><a href="#6-1-2-Cleanup-of-Previous-Tasks" class="headerlink" title="6.1.2 Cleanup of Previous Tasks"></a>6.1.2 Cleanup of Previous Tasks</h3><p>It deletes any existing scheduled task with the same name:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DeleteTask();</span><br></pre></td></tr></table></figure>
+
+<p>No exception is thrown if the task doesn’t exist.</p>
+<h3 id="6-1-3-Creating-a-New-Task-Definition"><a href="#6-1-3-Creating-a-New-Task-Definition" class="headerlink" title="6.1.3 Creating a New Task Definition"></a>6.1.3 Creating a New Task Definition</h3><p>The malware:</p>
+<ul>
+<li>Creates a new scheduled task definition</li>
+<li>Adds a new <strong>Time Trigger</strong></li>
+<li>Defines when execution should begin</li>
+</ul>
+<h3 id="6-1-4-Persistence-Configuration"><a href="#6-1-4-Persistence-Configuration" class="headerlink" title="6.1.4 Persistence Configuration"></a>6.1.4 Persistence Configuration</h3><p>The repetition pattern is:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Every 30 minutes</span><br><span class="line">For 365 days</span><br></pre></td></tr></table></figure>
+
+<p>This ensures long-term presence even if the user restarts the system or deletes the fake installer.</p>
+<hr>
+<h2 id="7-1-Encrypted-Task-Payload"><a href="#7-1-Encrypted-Task-Payload" class="headerlink" title="7.1 Encrypted Task Payload"></a>7.1 Encrypted Task Payload</h2><p>Inside <code>installer.run()</code>, the malware contains encrypted command strings which are decrypted before being written to disk.</p>
+<p>The decryption logic is located in:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UnloadString();</span><br></pre></td></tr></table></figure>
+
+<p><img src="/TrojanizedVPN/unloadString.png" alt="alt text"></p>
+<p>The sample uses a <strong>fixed key and IV</strong>, making the encryption purely cosmetic and easily reversible.</p>
+<hr>
+<h2 id="8-1-Decryption-Keys"><a href="#8-1-Decryption-Keys" class="headerlink" title="8.1 Decryption Keys"></a>8.1 Decryption Keys</h2><h3 id="8-1-1-Key-k1"><a href="#8-1-1-Key-k1" class="headerlink" title="8.1.1 Key (k1)"></a>8.1.1 Key (k1)</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="built_in">byte</span>[] k1 = (<span class="keyword">from</span> x <span class="keyword">in</span> Enumerable.Range(<span class="number">1</span>, <span class="number">32</span>)</span><br><span class="line">    <span class="keyword">select</span> (<span class="built_in">byte</span>)x).ToArray();</span><br></pre></td></tr></table></figure>
+
+<p>A simple byte sequence from 1 to 32.</p>
+<h3 id="8-1-2-IV-k2"><a href="#8-1-2-IV-k2" class="headerlink" title="8.1.2 IV (k2)"></a>8.1.2 IV (k2)</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="built_in">byte</span>[] k2 = (<span class="keyword">from</span> x <span class="keyword">in</span> Enumerable.Range(<span class="number">1</span>, <span class="number">16</span>)</span><br><span class="line">    <span class="keyword">select</span> (<span class="built_in">byte</span>)x).ToArray();</span><br></pre></td></tr></table></figure>
+
+<p>A sequence from 1 to 16.</p>
+<p>Both keys are static and predictable, indicating low sophistication.</p>
+<h2 id="9-1-Decrypted-Payload"><a href="#9-1-Decrypted-Payload" class="headerlink" title="9.1 Decrypted Payload"></a>9.1 Decrypted Payload</h2><p>The decrypted command launches:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mshta.exe</span><br></pre></td></tr></table></figure>
+
+<p>This is significant — mshta is a LOLBIN frequently used for remote code execution, allowing the attacker to execute HTML Application (HTA) malware.</p>
+<p>The malware also executes the task immediately to start the payload in real time.</p>
+<h2 id="10-1-Encrypted-Secondary-Payload-Assembly-Array"><a href="#10-1-Encrypted-Secondary-Payload-Assembly-Array" class="headerlink" title="10.1 Encrypted Secondary Payload (Assembly Array)"></a>10.1 Encrypted Secondary Payload (Assembly Array)</h2><p><img src="/TrojanizedVPN/assembly.png" alt="alt text"></p>
+<p>The malware stores an additional encoded .NET assembly inside an internal array:<br>This array is decoded inside the Unload section using the same key and IV used previously.<br>This secondary payload may include:</p>
+<ul>
+<li>Additional spyware logic</li>
+<li>A downloader</li>
+<li>Credential harvesting modules</li>
+<li>Browser profile theft routines</li>
+<li>Or a fallback persistence mechanism</li>
+</ul>
+<p>Static analysis tools like DIE (Detect It Easy) detect it as a .NET assembly:</p>
+<p>This confirms the sample contains at least two stages:</p>
+<ol>
+<li>The trojanized installer</li>
+<li>A decrypted internal .NET payload</li>
+</ol>
+<p>This staged architecture is very common in beginner-level malware.</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Trojan/">Trojan</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/ValetrixLoader/" title="VELETRIX Loader Reverse Engineering and Kill Chain Analysis"><img class="cover" src="/ValetrixLoader/cover.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">VELETRIX Loader Reverse Engineering and Kill Chain Analysis</div></div><div class="info-2"><div class="info-item-1">Throughout my ongoing studies in Malware Analysis and Reverse Engineering, I have had the opportunity to analyze different malicious campaigns associated with broader, more structured operations.</div></div></div></a><a class="pagination-related" href="/SyncBreeze/" title="Sync Breeze Enterprise 10.0.28 application"><img class="cover" src="/SyncBreeze/cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Sync Breeze Enterprise 10.0.28 application</div></div><div class="info-2"><div class="info-item-1">In the case of Sync Breeze Enterprise 10.0.28, the vulnerability is present in the web authentication interface, where user-provided data is not properly validated before being processed.</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="avatar"/></div><div class="author-info-name">Davi Santana</div><div class="author-info-description">Malware | Reverse Engineering | Exploit Development</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://linkedin.com/in/davigsantana"><i class="fab fa-linkedin"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/DaviGSantana" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://www.linkedin.com/in/davigsantana" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Research, analyses and documentation of malware, exploits and cyber operations.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Introduction"><span class="toc-text">1.1 Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-PE-Analysis"><span class="toc-text">2.1 PE Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-Initial-Execution"><span class="toc-text">3.1 Initial Execution</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-1-URL-Validation-and-UI-Handling"><span class="toc-text">3.1.1 URL Validation and UI Handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-2-Execution-of-the-run-Routine"><span class="toc-text">3.1.2 Execution of the run() Routine</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-The-run-Routine"><span class="toc-text">4.1 The run() Routine</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-1-Downloads-the-Fake-Installer"><span class="toc-text">4.1.1 Downloads the Fake Installer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-2-Executes-the-Downloaded-File"><span class="toc-text">4.1.2 Executes the Downloaded File</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Malicious-Behavior-installer-run"><span class="toc-text">5.1 Malicious Behavior: installer.run()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-Creating-a-Fake-%E2%80%9CEdge-Update-Service%E2%80%9D-Task"><span class="toc-text">6.1 Creating a Fake “Edge Update Service” Task</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-1-Task-Name-With-GUID"><span class="toc-text">6.1.1 Task Name With GUID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-2-Cleanup-of-Previous-Tasks"><span class="toc-text">6.1.2 Cleanup of Previous Tasks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-3-Creating-a-New-Task-Definition"><span class="toc-text">6.1.3 Creating a New Task Definition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-4-Persistence-Configuration"><span class="toc-text">6.1.4 Persistence Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-Encrypted-Task-Payload"><span class="toc-text">7.1 Encrypted Task Payload</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-Decryption-Keys"><span class="toc-text">8.1 Decryption Keys</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-1-Key-k1"><span class="toc-text">8.1.1 Key (k1)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-2-IV-k2"><span class="toc-text">8.1.2 IV (k2)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-Decrypted-Payload"><span class="toc-text">9.1 Decrypted Payload</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-Encrypted-Secondary-Payload-Assembly-Array"><span class="toc-text">10.1 Encrypted Secondary Payload (Assembly Array)</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter7/" title="Practical Malware Analysis - Malware Persistence Through Mutexes and Services"><img src="/pma-chapter7/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Malware Persistence Through Mutexes and Services"/></a><div class="content"><a class="title" href="/pma-chapter7/" title="Practical Malware Analysis - Malware Persistence Through Mutexes and Services">Practical Malware Analysis - Malware Persistence Through Mutexes and Services</a><time datetime="2026-08-20T21:50:03.573Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter6/" title="Practical Malware Analysis - Recognizing C code constructions in Assembly"><img src="/pma-chapter6/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Recognizing C code constructions in Assembly"/></a><div class="content"><a class="title" href="/pma-chapter6/" title="Practical Malware Analysis - Recognizing C code constructions in Assembly">Practical Malware Analysis - Recognizing C code constructions in Assembly</a><time datetime="2026-08-20T21:50:03.571Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter5/" title="Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis"><img src="/pma-chapter5/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis"/></a><div class="content"><a class="title" href="/pma-chapter5/" title="Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis">Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis</a><time datetime="2026-08-20T21:50:03.565Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter3/" title="Practical Malware Analysis - Basic Dynamic Analysis"><img src="/pma-chapter3/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Basic Dynamic Analysis"/></a><div class="content"><a class="title" href="/pma-chapter3/" title="Practical Malware Analysis - Basic Dynamic Analysis">Practical Malware Analysis - Basic Dynamic Analysis</a><time datetime="2026-08-20T21:50:03.564Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter1/" title="Practical Malware Analysis - Basic Static Techniques"><img src="/pma-chapter1/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Basic Static Techniques"/></a><div class="content"><a class="title" href="/pma-chapter1/" title="Practical Malware Analysis - Basic Static Techniques">Practical Malware Analysis - Basic Static Techniques</a><time datetime="2026-08-20T21:50:03.561Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Davi Santana</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search for Posts" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

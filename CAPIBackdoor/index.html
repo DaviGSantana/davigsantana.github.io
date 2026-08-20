@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CAPI Backdoor – Analysis of a .NET Stealer Campaign | Zykrav - Blog</title><meta name="author" content="Davi Santana"><meta name="copyright" content="Davi Santana"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Recently, the SEQRITE Labs published an analysis on a campaign targeted at the Russian automotive trade sector. After direct contact with the researcher Subhajeet Singha, I received the main sample to">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CAPI Backdoor – Analysis of a .NET Stealer Campaign">
+<meta property="og:url" content="https://davigstana.github.io/CAPIBackdoor/index.html">
+<meta property="og:site_name" content="Zykrav - Blog">
+<meta property="og:description" content="Recently, the SEQRITE Labs published an analysis on a campaign targeted at the Russian automotive trade sector. After direct contact with the researcher Subhajeet Singha, I received the main sample to">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://davigstana.github.io/CAPIBackdoor/cover.jpg">
+<meta property="article:published_time" content="2026-08-20T21:50:03.423Z">
+<meta property="article:modified_time" content="2026-08-20T21:50:03.423Z">
+<meta property="article:author" content="Davi Santana">
+<meta property="article:tag" content="APT28">
+<meta property="article:tag" content="Backdoor">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://davigstana.github.io/CAPIBackdoor/cover.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "CAPI Backdoor – Analysis of a .NET Stealer Campaign",
+  "url": "https://davigstana.github.io/CAPIBackdoor/",
+  "image": "https://davigstana.github.io/CAPIBackdoor/cover.jpg",
+  "datePublished": "2026-08-20T21:50:03.423Z",
+  "dateModified": "2026-08-20T21:50:03.423Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Davi Santana",
+      "url": "https://davigstana.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://davigstana.github.io/CAPIBackdoor/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><meta name="google-site-verification" content="nhQl74qB5kTasevDkFUKXJdPMWL-84-KgUzefAFlybM"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7808274774731635" crossorigin="anonymous"></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-921QF8PHT5"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-921QF8PHT5')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-921QF8PHT5', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"You have switched to Traditional Chinese","cht_to_chs":"You have switched to Simplified Chinese","day_to_night":"You have switched to Dark Mode","night_to_day":"You have switched to Light Mode","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-center"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: true,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CAPI Backdoor – Analysis of a .NET Stealer Campaign',
+  isHighlightShrink: undefined,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 8.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Zykrav - Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">CAPI Backdoor – Analysis of a .NET Stealer Campaign</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">CAPI Backdoor – Analysis of a .NET Stealer Campaign</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2026-08-20T21:50:03.423Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Malware-Analysis/">Malware Analysis</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>6mins</span></span></div></div></div><article class="container post-content" id="article-container"><p>The initial vector comes in a ZIP file, named in Russian as:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Перерасчет заработной платы 01.10.2025.zip</span><br></pre></td></tr></table></figure>
+<p>The ZIP file contains an LNK file named Перерасчет заработной платы 01.10.2025.lnk. Analysis shows that its sole purpose is to invoke rundll32.exe to load and execute the malicious payload adobe.dll, which is a .NET-based DLL implant.</p>
+<h2 id="1-1-NET-Reconnaissance"><a href="#1-1-NET-Reconnaissance" class="headerlink" title="1.1 .NET Reconnaissance"></a>1.1 .NET Reconnaissance</h2><p><img src="/CAPIBackdoor/pe.png" alt="PE metadata"></p>
+<p>The PE metadata immediately confirms that the sample is a .NET assembly, allowing the use of tools like dnSpy or ILSpy for full method-level inspection. This also indicates that traditional unpacking or native disassembly is not necessary, since most of the logic resides in managed code.</p>
+<h2 id="2-1-Analyze-Functions"><a href="#2-1-Analyze-Functions" class="headerlink" title="2.1 Analyze Functions"></a>2.1 Analyze Functions</h2><p>Now, upon analyzing the binary, we identified a robust set of functionalities implemented within the .NET implant known as <strong>CAPI Backdoor</strong>. Each mapped function reveals a specific operational behavior, forming the complete architecture for data collection, persistence, environment detection, and communication with the command and control server.<br>(CAPIBackdoor&#x2F;functions.png)<br>Next, we will analyze the functions</p>
+<h3 id="2-1-1-connect"><a href="#2-1-1-connect" class="headerlink" title="2.1.1 connect()"></a>2.1.1 connect()</h3><p><img src="/CAPIBackdoor/connect.png" alt="connect function"></p>
+<p>This function establishes the initial connection with the Command and Control (C2) server.<br>The routine uses a <code>TcpClient</code> to attempt to connect to the remote address defined by the operator, usually over port <strong>443</strong>, simulating legitimate HTTPS traffic.<br>Once connected, the function initializes the communication stream (<code>NetworkStream</code>) that will be used to send and receive instructions. This is the core of the backdoor communication: without <code>connect()</code>, no other remote functionality can be triggered.</p>
+<h3 id="2-1-2-av"><a href="#2-1-2-av" class="headerlink" title="2.1.2 av()"></a>2.1.2 av()</h3><p><img src="/CAPIBackdoor/av.png" alt="AV function"></p>
+<p>The <code>av()</code> function lists all antivirus programs installed on the compromised machine.<br>To do this, it queries WMI, specifically the class:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM AntiVirusProduct;</span><br></pre></td></tr></table></figure>
+<p>The results include names, status, and vendors of the installed security solutions.<br>This information is compiled and sent to the C2, allowing the operator to adjust commands, avoid detection, or choose alternative payloads based on existing defenses.</p>
+<h3 id="2-1-3-dmp1-dmp2-e-dmp3"><a href="#2-1-3-dmp1-dmp2-e-dmp3" class="headerlink" title="2.1.3 dmp1(), dmp2() e dmp3()"></a>2.1.3 dmp1(), dmp2() e dmp3()</h3><p>The three functions act as <strong>browser data stealers</strong>, each focusing on a specific type of profile.</p>
+<h4 id="2-1-3-1-dump1"><a href="#2-1-3-1-dump1" class="headerlink" title="2.1.3.1 dump1()"></a>2.1.3.1 dump1()</h4><p><img src="/CAPIBackdoor/dump1.png" alt="dump1 function"></p>
+<p>Creates a directory with a timestamp (e.g., <code>edprofile_20231117183000</code>) and tries to copy sensitive artifacts from the <strong>Edge&#x2F;Chromium</strong> browser, including files like <em>Local State</em>, which contain the DPAPI-encrypted key used to protect passwords and cookies.<br>All collected files are compressed into <strong>edprofile.zip</strong> and sent to C2.</p>
+<h4 id="2-1-3-2-dump2"><a href="#2-1-3-2-dump2" class="headerlink" title="2.1.3.2 dump2()"></a>2.1.3.2 dump2()</h4><p><img src="/CAPIBackdoor/dump2.png" alt="dump2 function"></p>
+<p>Performs a similar procedure, but this time targeting <strong>Chrome</strong> profiles.<br>The copied items include:</p>
+<ul>
+<li>Bookmarks</li>
+<li>History</li>
+<li>Favicons</li>
+<li>Top Sites</li>
+<li>Preferences</li>
+<li>Installed extensions</li>
+</ul>
+<h4 id="2-1-3-3-dump3"><a href="#2-1-3-3-dump3" class="headerlink" title="2.1.3.3 dump3()"></a>2.1.3.3 dump3()</h4><p><img src="/CAPIBackdoor/dump3.png" alt="dump3 function"></p>
+<p>Locates <strong>Firefox</strong> profiles and collects files such as:</p>
+<ul>
+<li>profiles.ini</li>
+<li>installs.ini</li>
+<li>extensions</li>
+<li>mini dumps</li>
+<li>cache</li>
+<li>thumbnails<br>These data are packaged in <strong>ffprofile_safe.zip</strong> and sent to the C2.</li>
+</ul>
+<h3 id="2-1-4-persiste1"><a href="#2-1-4-persiste1" class="headerlink" title="2.1.4 persiste1()"></a>2.1.4 persiste1()</h3><p><img src="/CAPIBackdoor/persiste1.png" alt="persiste1 function"></p>
+<p>This function establishes persistence via <strong>LOLBIN + LNK</strong>.<br>First, it obtains the current DLL location with <code>GetExecutingAssembly().Location</code>, then copies the file to:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%APPDATA%\Microsoft\</span><br></pre></td></tr></table></figure>
+<p>Then create a <strong>Microsoft.lnk</strong> shortcut inside the user’s Startup folder:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\</span><br></pre></td></tr></table></figure>
+<p>Thus, every Windows startup runs the backdoor again.</p>
+<h3 id="2-1-5-persiste2"><a href="#2-1-5-persiste2" class="headerlink" title="2.1.5 persiste2()"></a>2.1.5 persiste2()</h3><p><img src="/CAPIBackdoor/persiste2.png" alt="persiste2 function"></p>
+<p>Creates additional persistence via Task Scheduler.<br>The flow is:</p>
+<ol>
+<li>Re-copy the payload to ‘%APPDATA%Microsoft’</li>
+<li>Create a new scheduled task called AdobePDF</li>
+<li>Set a trigger that starts <strong>one hour later</strong> and repeats <strong>every hour for seven days</strong></li>
+<li>Associate the task with the command:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Windows\System32\rundll32.exe file.dll</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>Register the task in the root of the scheduler</li>
+</ol>
+<p>This way, even if the LNK is removed, the malware will continue to run periodically.</p>
+<h3 id="2-1-6-ReceiveCommands"><a href="#2-1-6-ReceiveCommands" class="headerlink" title="2.1.6 ReceiveCommands()"></a>2.1.6 ReceiveCommands()</h3><p><img src="/CAPIBackdoor/receivecommands.png" alt="ReceiveCommands function"></p>
+<p>This function is responsible for <strong>receiving raw commands from the C2</strong>.<br>The method reads bytes directly from the <code>NetworkStream</code>, stores them in a buffer, and converts the content to a string after normalizing the data.<br>The result is a sequence of instructions that will be interpreted by <code>ExecuteCommands()</code>.</p>
+<h3 id="2-1-7-ExecuteCommands"><a href="#2-1-7-ExecuteCommands" class="headerlink" title="2.1.7 ExecuteCommands()"></a>2.1.7 ExecuteCommands()</h3><p><img src="/CAPIBackdoor/executecommands.png" alt="ExecuteCommands function"></p>
+<p>This is where the operational logic of the malware occurs.<br>Each command sent by the C2 is translated into a specific action, such as:</p>
+<ul>
+<li>Terminate the connection</li>
+<li>Return the current directory</li>
+<li>Create persistence</li>
+<li>Execute <code>dmp1/dmp2/dmp3</code></li>
+<li>Collect information from the machine</li>
+<li>Take a screenshot</li>
+<li>Execute pre-programmed internal commands</li>
+<li>Send results back to the operator</li>
+</ul>
+<p>It is the operational brain of the backdoor, implementing everything the attacker requests.</p>
+<h3 id="2-1-8-screen"><a href="#2-1-8-screen" class="headerlink" title="2.1.8 screen()"></a>2.1.8 screen()</h3><p><img src="/CAPIBackdoor/screen.png" alt="Screen function"></p>
+<p>Captures a screenshot of the user’s current screen in real time.<br>The method uses the .NET graphics API to capture the screen surface, inserts a timestamp into the content, and converts the image to <strong>PNG</strong>, which is then sent to the C2 server.<br>This feature is extremely useful for passive monitoring, spying, and viewing user activity.</p>
+<h3 id="2-1-9-IsLikelyVm"><a href="#2-1-9-IsLikelyVm" class="headerlink" title="2.1.9 IsLikelyVm()"></a>2.1.9 IsLikelyVm()</h3><p><img src="/CAPIBackdoor/islikelyvm.png" alt="IsLikelyVm function"></p>
+<p>Function dedicated to <strong>virtualized environment fingerprinting</strong>.<br>It executes a set of heuristics to determine if the sample is being analyzed in a lab environment.</p>
+<p>The checks include:</p>
+<ul>
+<li>Suspicious processes and services</li>
+<li>Driver strings associated with VMs</li>
+<li>BIOS and SMBIOS manufacturer</li>
+<li>Typical MAC addresses of VMware, VirtualBox, Hyper-V, QEMU</li>
+<li>Presence of hypervisors (<code>Win32_ComputerSystem.HypervisorPresent</code>)</li>
+<li>Anomalous time patterns</li>
+<li>Fake or generic GPU</li>
+<li>Hard drive with generic vendor (e.g., VBOX, QEMU)</li>
+</ul>
+<p>If any critical heuristic is detected, the malware may alter its behavior or stop operations.</p>
+<h3 id="2-1-10-ReceiveFile"><a href="#2-1-10-ReceiveFile" class="headerlink" title="2.1.10 ReceiveFile()"></a>2.1.10 ReceiveFile()</h3><p><img src="/CAPIBackdoor/receivefile.png" alt="ReceiveFile function"></p>
+<p>This function performs <strong>reverse exfiltration</strong> — allowing the operator to send data from the victim.<br>It reads bytes from <code>Client._stream</code> until it finds a delimiter marker. After identifying the marker, the content is written to <code>fileName</code>, the marker is removed, and the malware responds with “File Saved!”.<br>It is used to inject additional modules, update payloads, or install add-ons.</p>
+<hr>
+<h2 id="3-1-Conclusion"><a href="#3-1-Conclusion" class="headerlink" title="3.1 Conclusion"></a>3.1 Conclusion</h2><p>These are some of the most relevant features of the Seqrite CAPI Backdoor observed during the analysis of the sample.<br>They make up a mature, modular backdoor focused on information gathering, resilient persistence, and evasion of analysis environments.</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Backdoor/">Backdoor</a><a class="post-meta__tags" href="/tags/APT28/">APT28</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/CBFRPro/" title="Certified Binary Fuzzing &amp; Reversing Professional Resolution"><img class="cover" src="/CBFRPro/cover.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Certified Binary Fuzzing & Reversing Professional Resolution</div></div><div class="info-2"><div class="info-item-1">The analyzed samples show characteristics consistent with targeted campaigns, in which social engineering techniques are used as the initial vector of compromise.</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="avatar"/></div><div class="author-info-name">Davi Santana</div><div class="author-info-description">Malware | Reverse Engineering | Exploit Development</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://linkedin.com/in/davigsantana"><i class="fab fa-linkedin"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/DaviGSantana" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://www.linkedin.com/in/davigsantana" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Research, analyses and documentation of malware, exploits and cyber operations.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-NET-Reconnaissance"><span class="toc-text">1.1 .NET Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Analyze-Functions"><span class="toc-text">2.1 Analyze Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-connect"><span class="toc-text">2.1.1 connect()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-av"><span class="toc-text">2.1.2 av()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-dmp1-dmp2-e-dmp3"><span class="toc-text">2.1.3 dmp1(), dmp2() e dmp3()</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-1-dump1"><span class="toc-text">2.1.3.1 dump1()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-2-dump2"><span class="toc-text">2.1.3.2 dump2()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-3-dump3"><span class="toc-text">2.1.3.3 dump3()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-4-persiste1"><span class="toc-text">2.1.4 persiste1()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-5-persiste2"><span class="toc-text">2.1.5 persiste2()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-6-ReceiveCommands"><span class="toc-text">2.1.6 ReceiveCommands()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-7-ExecuteCommands"><span class="toc-text">2.1.7 ExecuteCommands()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-8-screen"><span class="toc-text">2.1.8 screen()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-9-IsLikelyVm"><span class="toc-text">2.1.9 IsLikelyVm()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-10-ReceiveFile"><span class="toc-text">2.1.10 ReceiveFile()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-Conclusion"><span class="toc-text">3.1 Conclusion</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter7/" title="Practical Malware Analysis - Malware Persistence Through Mutexes and Services"><img src="/pma-chapter7/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Malware Persistence Through Mutexes and Services"/></a><div class="content"><a class="title" href="/pma-chapter7/" title="Practical Malware Analysis - Malware Persistence Through Mutexes and Services">Practical Malware Analysis - Malware Persistence Through Mutexes and Services</a><time datetime="2026-08-20T21:50:03.573Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter6/" title="Practical Malware Analysis - Recognizing C code constructions in Assembly"><img src="/pma-chapter6/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Recognizing C code constructions in Assembly"/></a><div class="content"><a class="title" href="/pma-chapter6/" title="Practical Malware Analysis - Recognizing C code constructions in Assembly">Practical Malware Analysis - Recognizing C code constructions in Assembly</a><time datetime="2026-08-20T21:50:03.571Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter5/" title="Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis"><img src="/pma-chapter5/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis"/></a><div class="content"><a class="title" href="/pma-chapter5/" title="Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis">Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis</a><time datetime="2026-08-20T21:50:03.565Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter3/" title="Practical Malware Analysis - Basic Dynamic Analysis"><img src="/pma-chapter3/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Basic Dynamic Analysis"/></a><div class="content"><a class="title" href="/pma-chapter3/" title="Practical Malware Analysis - Basic Dynamic Analysis">Practical Malware Analysis - Basic Dynamic Analysis</a><time datetime="2026-08-20T21:50:03.564Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/pma-chapter1/" title="Practical Malware Analysis - Basic Static Techniques"><img src="/pma-chapter1/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Practical Malware Analysis - Basic Static Techniques"/></a><div class="content"><a class="title" href="/pma-chapter1/" title="Practical Malware Analysis - Basic Static Techniques">Practical Malware Analysis - Basic Static Techniques</a><time datetime="2026-08-20T21:50:03.561Z" title="Created 2026-08-20 21:50:03">2026-08-20</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Davi Santana</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="Search for Posts" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
