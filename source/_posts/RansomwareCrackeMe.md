@@ -1,5 +1,6 @@
 ---
 title: Ransomware CrackMe – Reverse Engineering Walkthrough
+date: 2025-12-24 17:00:00
 description: A hacker launched a ransomware attack on Lisa’s machine, encrypting all critical data in her wallet. Help Lisa recover her lost files!.
 categories:
   - CTF

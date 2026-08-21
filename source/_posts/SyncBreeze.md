@@ -1,5 +1,6 @@
 ---
 title: Sync Breeze Enterprise 10.0.28 application
+date: 2026-03-01 18:00:00
 description: In the case of Sync Breeze Enterprise 10.0.28, the vulnerability is present in the web authentication interface, where user-provided data is not properly validated before being processed. 
 categories:
   - Exploit

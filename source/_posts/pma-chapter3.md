@@ -1,5 +1,6 @@
 ---
 title: Practical Malware Analysis - Basic Dynamic Analysis
+date: 2026-01-04 18:00:00
 description: In this post, I continue my studies of the book "Practical Malware Analysis" and begin working on Lab 3.
 categories:
   - Practical Malware Analysis

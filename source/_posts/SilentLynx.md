@@ -1,5 +1,6 @@
 ---
 title: Multi-Stage Infection Chain Delivered via Phishing
+date: 2026-01-21 19:00:00
 description: The analyzed samples show characteristics consistent with targeted campaigns, in which social engineering techniques are used as the initial vector of compromise.
 categories:
   - Malware Analysis

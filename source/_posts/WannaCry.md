@@ -1,5 +1,6 @@
 ---
 title: WannaCry Anatomy of a Ransomware Worm
+date: 2026-08-10 15:00:00
 description: WannaCry, also known as WannaCrypt, was a ransomware that became famous in May 2017 for spreading quickly around the world. The malware is widely linked to the Lazarus Group, a group associated with North Korea.
 categories:
   - Malware Analysis

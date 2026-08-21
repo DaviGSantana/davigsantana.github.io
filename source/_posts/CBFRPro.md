@@ -1,5 +1,6 @@
 ---
 title: Certified Binary Fuzzing & Reversing Professional Resolution
+date: 2026-03-16 12:00:00
 description: The analyzed samples show characteristics consistent with targeted campaigns, in which social engineering techniques are used as the initial vector of compromise.
 categories:
   - Certification

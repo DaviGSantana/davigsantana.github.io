@@ -1,5 +1,6 @@
 ---
 title: Practical Malware Analysis - Identifying Malicious Behavior via Static Analysis
+date: 2026-02-06 16:00:00
 description: In this post, I continue my studies of the book "Practical Malware Analysis" and begin working on Lab 5.
 categories:
   - Practical Malware Analysis

@@ -1,5 +1,6 @@
 ---
 title: Practical Malware Analysis - Basic Static Techniques
+date: 2025-12-03 12:00:00
 description: In this post, I continue my studies of the book "Practical Malware Analysis" and begin working on Lab 1.
 categories:
   - Practical Malware Analysis

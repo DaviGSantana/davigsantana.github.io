@@ -1,5 +1,6 @@
 ---
 title: CAPI Backdoor – Analysis of a .NET Stealer Campaign
+date: 2025-11-17 17:00:00
 description: Recently, the SEQRITE Labs published an analysis on a campaign targeted at the Russian automotive trade sector. After direct contact with the researcher Subhajeet Singha, I received the main sample to carry out an in-depth reverse analysis, focusing on the internal behavior of backdoor and in the architecture of functionalities.
 categories:
   - Malware Analysis

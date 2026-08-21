@@ -1,5 +1,6 @@
 ---
 title: Practical Malware Analysis - Malware Persistence Through Mutexes and Services
+date: 2026-05-13 16:00:00
 description: In this post, I continue my studies of the book "Practical Malware Analysis" and begin working on Lab 7.
 categories:
   - Practical Malware Analysis

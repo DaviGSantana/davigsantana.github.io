@@ -1,5 +1,6 @@
 ---
 title: VELETRIX Loader Reverse Engineering and Kill Chain Analysis
+date: 2026-05-12 18:00:00
 description: Throughout my ongoing studies in Malware Analysis and Reverse Engineering, I have had the opportunity to analyze different malicious campaigns associated with broader, more structured operations.
 categories:
   - Malware Analysis

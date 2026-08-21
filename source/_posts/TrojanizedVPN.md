@@ -1,5 +1,6 @@
 ---
 title: Trojanized VPN Installer Delivering Malware
+date: 2025-11-21 18:00:00
 description: Malicious installer disguised as the legitimate NordVPN setup has been circulating online, targeting unsuspecting users.
 categories:
   - Malware Analysis

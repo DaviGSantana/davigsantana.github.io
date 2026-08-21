@@ -1,5 +1,6 @@
 ---
 title: Operation Silent Serpent MalOps
+date: 2026-08-19 18:00:00
 description: A senior researcher at South Korea’s Ministry of Science opened a mali…
 categories:
   - Malware Analysis
