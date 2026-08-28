@@ -1,6 +1,6 @@
 ---
 title: Practical Malware Analysis - Runtime Behavior Analysis using OllyDbg
-date: 2026-05-13 16:00:00
+date: 2026-08-26 16:00:00
 description: In this post, I continue my studies of the book "Practical Malware Analysis" and begin working on Lab 9.
 categories:
   - Practical Malware Analysis
