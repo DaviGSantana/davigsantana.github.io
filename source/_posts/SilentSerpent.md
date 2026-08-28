@@ -662,3 +662,10 @@ R: DE7FE8842C46BC5C2F723DEE3D4B07043D531D067C06CAA3263000BCC41AECDD
 
 # The Loader
 
+> **Scenario:** A protected binary orchestrates payload deployment. Defeat the protections and trace the execution flow.
+
+## 4.1.1 Question 1
+```
+Based on the static analysis tool, what is the specific commercial protector/packer used on the malware?
+```
+

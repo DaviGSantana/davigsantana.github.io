@@ -10,8 +10,6 @@ cover: pma-chapter7/cover.jpg
 ---
 
 
-## 1.1 Introduction
-
 In this post, I continue my studies of the book "Practical Malware Analysis" and begin working on Lab 7. The goal is to apply practical static and dynamic analysis techniques to understand the behavior of real samples, reinforcing fundamental concepts used in malware analysis environments. This content is part of my study routine and documentation of the learning steps.
 
 ---
