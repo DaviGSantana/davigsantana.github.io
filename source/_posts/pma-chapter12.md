@@ -1,6 +1,6 @@
 ---
 title: Practical Malware Analysis - Covert Malware Launching
-date: 2026-09-01 16:00:00
+date: 2026-08-31 16:00:00
 description: In this post, I continue my studies of the book "Practical Malware Analysis" and begin working on Lab 12.
 categories:
   - Practical Malware Analysis
