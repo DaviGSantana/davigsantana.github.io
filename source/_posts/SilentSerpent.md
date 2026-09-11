@@ -857,3 +857,4 @@ R: 0xFFFFFFF1
 ```
 The malware retrieves a directory and appends a suffix to it. What is the full path it constructs in code?
 ```
+
