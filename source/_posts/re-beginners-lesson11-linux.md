@@ -92,7 +92,7 @@ De cara vamos diretamente aonde sabemos que iremos encontrar a senha correta em 
 ```bash
  →   0x40119b <check_password+0025> call   0x401070 <strcmp@plt>
   strcmp@plt (
-   $rdi = 0x00007fffffffdc80 → 0x0000000069766164 ("davi"?),
+   $rdi = 0x00007fffffffdc80 → 0x0000000069766164 ("test"?),
    $rsi = 0x0000000000402008 → "r3vers1ng_101",
    $rdx = 0x0000000000402008 → "r3vers1ng_101"
   )
@@ -734,9 +734,9 @@ Retornando:
 ***Resumindo***
  ```
  [0] [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11]
- R   E   _   {   ?   ?   ?   ?   ?   ?    ?    }
- └────────────┘ └─────────────────────┘   └────┘
-   stage2            soma = 704            stage3
+  R   E   _   {   ?   ?   ?   ?   ?   ?    ?    }
+ └────────────┘  └──────────────────────────┘ └───┘
+     stage2              soma = 704           stage3
 
  ```
 
