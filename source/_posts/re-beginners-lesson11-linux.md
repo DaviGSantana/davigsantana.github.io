@@ -19,8 +19,9 @@ In this lesson, I worked with the practical cracking labs for Linux, analyzing d
 The goal was to solve the challenges by analyzing the behavior of the binaries, aiming to understand their internal logic and identify the information needed to overcome each step of the validation.
 
 # crackme1
-## Objetivo
-Encontre a senha hardcoded e insira-a para ver a mensagem de sucesso.
+## Goal
+
+Find the hardcoded password and enter it to see the success message.
 
 ## Recon
 
@@ -30,9 +31,9 @@ Encontre a senha hardcoded e insira-a para ver a mensagem de sucesso.
 crackme1: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=f1294f71e847254866d0b014f85e3124ea8d65a8, for GNU/Linux 3.2.0, not stripped
 ```
 
-Aqui sabemos que e um binário ELF 64-bits.
+Here we know that it is a 64-bit ELF binary.
 
-Vamos ver todas as strings possíveis no binário com o comando strings(irei deixar apenas as interessantes):
+Let's look at all possible strings in the binary with the strings command (I'll only leave the interesting ones):
 ```bash
 r3vers1ng_101
 === CrackMe Level 1 ===
@@ -42,12 +43,13 @@ Enter the password:
 [-] Access Denied. Try again.
 check_password
 ```
-Aqui possivelmente ja temos a senha e a flag obtida que precisamos para concluir o desafio, mais vamos mais a fundo.
+Here we possibly already have the password and the flag obtained that we need to complete the challenge, but let's go further.
 
 ---
-## Analise estática
+## Static analysis
 
-Podemos analisar também algumas seções interessantes(.rodata) do binário para vermos um poucos de seus dados e funcionalidades.
+We can also check out some interesting sections (.rodata) of the binary to see a bit of its data and functionalities.
+
 ```bash
  402000 01000200 00000000 72337665 7273316e  ........r3vers1n
  402010 675f3130 31003d3d 3d204372 61636b4d  g_101.=== CrackM
@@ -63,7 +65,8 @@ Podemos analisar também algumas seções interessantes(.rodata) do binário par
  4020b0 6761696e 2e00                        gain.. 
 ```
 
-Analisando as funções do binário, claramente encontramos aonde e feito a verificação da senha fornecida pelo usuário(check_password), vamos ver oque possivelmente ela faz:
+Analyzing the binary's functions, we clearly find where the verification of the password provided by the user (check_password) is done, let's see what it possibly does:
+
 ```bash
 > objdump -M intel -d crackme1 | grep -A 20 "<check_password>:"
   401176:       55                      push   rbp
@@ -83,12 +86,12 @@ Analisando as funções do binário, claramente encontramos aonde e feito a veri
   4011a8:       c9                      leave
   4011a9:       c3                      ret
 ```
-Dentro da função ele utiliza 'strcmp' para comparar a senha fornecida com o usuário(rdi) com a senha correta(rsi) e esperada pelo programa.
+Inside the function, he uses 'strcmp' to compare the password provided with the user (rdi) to the correct password (rsi) expected by the program.
 
 ---
-## Analise dinâmica
+## Dynamic analysis
 
-De cara vamos diretamente aonde sabemos que iremos encontrar a senha correta em 'strcmp' dentro da função 'check_password':
+Right off the bat, let's go straight to where we know we'll find the correct password in 'strcmp' inside the 'check_password' function:
 ```bash
  →   0x40119b <check_password+0025> call   0x401070 <strcmp@plt>
   strcmp@plt (
@@ -99,7 +102,7 @@ De cara vamos diretamente aonde sabemos que iremos encontrar a senha correta em 
 
 ```
 
-Executando o binário fornecendo a senha correta:
+Running the binary by providing the correct password:
 
 ```bash
 ./crackme1
@@ -110,103 +113,102 @@ Enter the password: r3vers1ng_101
 ```
 # crackme2
 
-Encontre a senha codificada com XOR no binário. A senha não está armazenada
-em texto claro -- você precisa encontrar o esquema de codificação e revertê-lo.
+Find the password encoded with XOR in the binary. The password isn't stored in plain text -- you need to find the encoding scheme and reverse it.
 
-O binario faz a mesma funcao do crackme1, so que utilizando criptografia XOR, assim temos a funcao check_password que irei explicar codigo por codigo:
+The binary works the same way as crackme1, but using XOR encryption, so we have the check_password function that I will explain line by line:
 
 ![alt text](re-beginners-lesson11-linux/XbF9fuu.png)
 
-1. Cria as variáveis locais
+1. Create the local variables
 ```asm
 push rbp
 mov rbp, rsp
 sub rsp, 0x40
 ```
-Reserva 0x40 = 64 bytes na stack para a função.
+Reserves 0x40 = 64 bytes on the stack for the function.
 
-Os principais locais usados são:
+The main locations used are:
 ```
-[rbp-0x38] -> input (senha fornecida pelo usuario)
-[rbp-0x30] -> buffer (senha decodificada)
-[rbp-0x04] -> contador 'i'
+[rbp-0x38] -> input (password provided by the user)
+[rbp-0x30] -> buffer (decoded password)
+[rbp-0x04] -> counter 'i'
 ```
 
 ---
 
-2.  Salva o input e inicializa o contador
+2.  Save the input and initialize the counter
 ```asm
 mov QWORD PTR [rbp-0x38], rdi
 mov DWORD PTR [rbp-0x04], 0x0
 ```
-Como `RDI` contem o primeiro argumento que foi passado ao chamar esta função `check_password`:
+How `RDI` contains the first argument that was passed when calling this `check_password` function:
 ```asm
 [rbp-0x38] = input
 ```
-E:
+And:
 ```asm
 [rbp-0x04] = 0
 ```
-Então:
+So:
 ```c
 i = 0;
 ```
 
 ---
 
-3. Pega um caractere de `encoded`
+3. Grab a character from `encoded`
 ```asm
 mov eax, DWORD PTR [rbp-0x4]
 cdqe
 lea rdx, [rip-0x2ea9]       # encoded
 movzx eax, BYTE PTR [rax+rdx]
 ```
-Aqui ele usa o contador para acessar:
+Here he uses the counter to access:
 ```c
 encoded[i];
 ```
-Então, conceitualmente:
+So, conceptually:
 ```c
 i = 0;
 encoded[0];
 ```
-Depois 
+Later:
 ```c
 i = 1;
 encoded[1];
 ```
-e assim em diante...
+and so on...
 
 ---
 
-4. Decodifica com XOR
+4. Decodes with XOR
 ```asm
 xor eax, 0x37
 ```
-Faz:
+Do:
 ```c
 encoded[i] ^ 0x37;
 ```
-Esse e o processo de decodificação.
+This is the decoding process.
 
 ---
 
-5. Colocar o resultado no buffer
+5. Put the result in the buffer
 ```asm
 mov edx, eax
 mov eax, DWORD PTR [rbp-0x4]
 cdqe
 mov BYTE PTR [rbp+rax*1-0x30], dl
 ```
-O resultado do XOR e colocado em:
+The result of the XOR is placed in:
 ```c
 buffer[i];
 ```
-Lembrando:
+Remember:
 ```
-buffer comeca em [rbp-0x30]
+buffer starts at [rbp-0x30]
 ```
-Então:
+Do:
 ```c
 buffer[0] = encoded[0] ^ 0x37;
 buffer[1] = encoded[1] ^ 0x37;
@@ -215,18 +217,18 @@ buffer[2] = encoded[2] ^ 0x37;
 
 ---
 
-6. Incrementa o contador
+6. Increase the counter
 ```asm
 add DWORD PTR [rbp-0x4], 0x1
 ```
-E simplesmente:
+And simply:
 ```c
 i++;
 ```
 
 ---
 
-7. Verifica se chegou ao final de `encoded`:
+7. Check if it has reached the end of `encoded`:
 ```asm 
 mov eax, DWORD PTR [rbp-0x4]
 cdqe
@@ -235,71 +237,71 @@ movzx eax, BYTE PTR [rax+rdx]
 test al, al
 jne 0x40118b
 ```
-Verifica:
+Checks:
 ```c
 encoded[i] != '\0'
 ```
-Se ainda não chegou ao final, volta para o inicio do loop:
+If it hasn't reached the end yet, go back to the start of the loop:
 ```
--> pega encoded[i]
+-> take encoded[i]
 -> XOR 0x37
--> colocar em buffer[i]
+-> put it in buffer[i]
 -> i++
--> verifica novamente
+-> check again
 ```
 
 ---
 
-8. Finaliza o buffer
+8. Finish the buffer
 ```asm 
 mov BYTE PTR [rbp+rax*1-0x30], 0x0
 ```
-Colocar `\0` no final:
+Put `0` at the end:
 ```c
 buffer[i] = '\0';
 ```
-Agora `buffer` e uma string valida.
+Now `buffer` is a valid string.
 
 ---
 
-9. Compara com o input
-```asm  
+9. Compare with the input
+```asm
 mov rsi, rdx
 mov rdi, rax
 call strcmp@plt
 ```
-Prepara:
+Get ready:
 ```
 RDI -> input
 RSI -> buffer
 ```
-e chama:
+and call:
 ```c
 strcmp(input, buffer);
 ```
 
 ---
 
-10. Retorna 1 ou 0
-```asm 
+10. Returns 1 or 0
+```asm
 test eax, eax
 sete al
 movzx eax, al
-``` 
-Se `strcmp()` retornar `0`:
+```
+If `strcmp()` returns `0`:
 ```
 input == buffer
 ```
-então retorna:
+then it returns:
 ```
-1     caso contrario ->  0
+1 otherwise -> 0
 ```
 
-Como sabemos, na chamada para `strcmp()` ira ser passado o buffer de criptografado para comparar com a string fornecida pelo usuário, e assim conseguimos ver em texto claro a string esperada.
+As we know, in the call to `strcmp()` the encrypted buffer will be passed to compare with the string provided by the user, and this way we can see the expected string in plain text.
 
 ![alt text](re-beginners-lesson11-linux/sH7oMRD.png)
 
-Então, passando a senha correta:
+So, entering the correct password:
 ```bash
 ./crackme2 
 === CrackMe Level 2 ===
@@ -312,150 +314,149 @@ Enter the password: xorm4Ecs2r
 
 # crackme3
 
-Passe por todos os três estágios de validação. A senha possui um formato, comprimento e
-restrições de caracteres específicos. Você deve fazer engenharia reversa de cada estágio separadamente.
+Go through all three stages of validation. The password has a specific format, length, and character restrictions. You need to reverse engineer each stage separately.
 
-Neste binário a verificação da senha passa por 3 estágios: `stage1`, `stage2` e `stage3`.
+In this binary, the password check goes through 3 stages: `stage1`, `stage2`, and `stage3`.
 
 ## stage1
-Vamos ver o código de `stage1`:
+Let's take a look at the `stage1` code:
 
 ![alt text](re-beginners-lesson11-linux/6KwHNKe.png)
 
-1. Cria o stack frame:
+1. Creates the stack frame:
 ```asm
-push rbp 
+push rbp
 mov rbp, rsp
 sub rsp, 0x10
 ```
-Reserva `0x10` = 16 bytes na stack.
+Reserves `0x10` = 16 bytes on the stack.
 
-Aqui temos:
+Here we have:
 ```
 [rbp-0x8] -> input
 ```
 
 ---
 
-2. Salva o input
+2. Save the input
 ```asm
 mov QWORD PTR [rbp-0x8], rdi
 ```
-`RDI` contem o primeiro argumento da função.
+`RDI` contains the first argument of the function.
 
-Então:
+So:
 ```
 [rbp-0x8] = input
 ```
 
 ---
 
-3. Prepara o input para `strlen`
+3. Prepare the input for `strlen`
 ```asm
 mov rax, QWORD PTR [rbp-0x8]
 mov rdi, rax
 call strlen@plt
 ```
-Recupera o `input` e coloca em `RDI`.
+It grabs the `input` and puts it into `RDI`.
 
-Depois chama:
+Then it calls:
 ```c
 strlen(input);
 ```
-O resultado de `strlen()` fica em `RAX`.
+The result of `strlen()` ends up in `RAX`.
 
 ---
 
-4. Compara o tamanho com `0xc` = 12.
+4. Compare the size with `0xc` = 12.
 ```asm
 cmp rax, 0xc
 ```
 
 ---
 
-5. Converte o resultado em verdadeiro/falso
-```asm 
+5. Converts the result to true/false
+```asm
 sete al
 movzx eax, al
 ```
-`sete` significa ***Set if Equal***.
+`sete` means ***Set if Equal***.
 
-Se:
+If:
 ```
 RAX == 12
 ```
-então:
+then:
 ```
 AL = 1
 ```
-Caso contrario:
+Otherwise:
 ```
 AL = 0
 ```
-Depois `movzx` transforma isso em um valor inteiro:
+After that, `movzx` turns it into an integer value:
 ```
 EAX = 1
-ou
+or
 EAX = 0
 ```
 
 ---
 
-6. Retorno
+6. Return
 ```asm
-leave 
+leave
 ret
 ```
-A chamada para a função `stage1` retorna em `RAX` :
+The call to the `stage1` function returns in `RAX`:
 ```
-1 -> input possui exatamente 12 caracteres
-0 -> input possui tamanho diferente de 12
+1 -> input has exactly 12 characters
+0 -> input has a size different from 12
 ```
 
 
 ## stage2
-Vamos ver o código de `stage2`:
+Let's look at the `stage2` code:
 
 ![alt text](re-beginners-lesson11-linux/Ty3ABgd.png)
 
-1. Salva o input
+1. Saves the input
 ```asm
-push rbp 
+push rbp
 mov rbp, rsp
 mov QWORD PTR [rbp-0x8], rdi
 ```
-`RDI` contem o argumento da função, então:
+`RDI` contains the function argument, so:
 ```
 [rbp-0x8] -> input
 ```
-Nao ha contador explicito, ela acessa diretamente as posições `0`,`1`,`2` e `3`.
+There’s no explicit counter, it directly accesses positions `0`, `1`, `2`, and `3`.
 
 ---
 
-2. Verifica o primeiro caractere
+2. Check the first character
 ```asm
 mov rax, QWORD PTR [rbp-0x8]
 movzx eax, BYTE PTR [rax]
 cmp al, 0x52
 jne 0x4011e1
 ```
-`[rax]` significa"
+`[rax]` means
 ```c
 input[0];
 ```
-E compara com:
+And it compares with:
 ```
 0x52 = 'R'
 ```
-Então:
+So:
 ```
 input[0] == 'R'
 ```
-Se for diferente, `jne` pula para o final e retorna `0`.
+If it's different, `jne` jumps to the end and returns `0`.
 
 ---
 
-3. Verifica o seguindo caractere
+3. Check the next character
 ```asm
 mov rax, QWORD PTR [rbp-0x8]
 add rax, 0x1
@@ -463,26 +464,26 @@ movzx eax, BYTE PTR [rax]
 cmp al, 0x45
 jne 0x4011e1
 ```
-Aqui:
+Here:
 ```
 rax = input + 1
 ```
-Portanto:
+So:
 ```c
 input[1];
 ```
-e comparado com:
+and compared with:
 ```
 0x45 = 'E'
 ```
-Então:
+Then:
 ```
 input[1] == 'E'
 ```
 
 ---
 
-4. Verifica o terceiro caractere
+4. Check the third character
 ```asm
 mov rax, QWORD PTR [rbp-0x8]
 add rax, 0x2
@@ -490,22 +491,22 @@ movzx eax, BYTE PTR [rax]
 cmp al, 0x5f
 jne 0x4011e1
 ```
-Agora acessa:
+Now access:
 ```c
 input[2];
 ```
-E compara com:
+And compare with:
 ```
 0x5f = '_'
 ```
-Então:
+So:
 ```
 input[2] == '_'
 ```
 
 ---
 
-5. Verifica o quarto caractere
+5. Check the fourth character
 ```asm
 mov rax, QWORD PTR [rbp-0x8]
 add rax, 0x3
@@ -513,69 +514,69 @@ movzx eax, BYTE PTR [rax]
 cmp al, 0x7b
 jne 0x4011e1
 ```
-Acessa:
+Accesses:
 ```c
 input[3];
 ```
-e compara com:
+and compares with:
 ```
 0x7b = '{'
 ```
-Então:
+So:
 ```
 input[3] == '{'
 ```
 
 ---
 
-6. Se tudo estiver correto:
+6. If everything is correct:
 ```asm
 mov eax, 0x1
 jmp 0x4011e6
 ```
-Retorna:
+It returns:
 ```
 1
 ```
-Se ***qualquer uma*** das comparações falhar:
+If ***any*** of the comparisons fail:
 ```asm
 mov eax, 0x0
 ```
-Retorna:
+It returns:
 ```
 0
 ```
 
- > Agora, sabemos que o `stage2` verifica se os primeiros 4 caracteres da strings de 12 caracteres fornecida começam com 'RE_{'.
+ > Now, we know that `stage2` checks if the first 4 characters of the provided 12-character string start with 'RE_{'.
 
 ---
 ## stage3
-Vamos ver o código de `stage3`:
+Let's look at the `stage3` code:
 
 ![alt text](re-beginners-lesson11-linux/4FqvmSE.png)
 
-1. Inicializa as variáveis
+1. Initialize the variables
 ```asm
 mov QWORD PTR [rbp-0x18], rdi
 mov QWORD PTR [rbp-0x4], 0x0
 mov QWORD PTR [rbp-0x8], 0x4
 ```
- Temos:
+We have:
 ```
- [rbp-0x18] -> input
- [rbp-0x04] -> soma = 0
- [rbp-0x08] -> contador = 4
+[rbp-0x18] -> input
+[rbp-0x04] -> sum = 0
+[rbp-0x08] -> counter = 4
 ```
-Ou seja:
+That is:
 ```c
 int sum = 0;
 int i = 4;
 ```
-O contador começa em `4`, porque a `stage2` ja verificou as posições `0` a `3`.
+The counter starts at `4` because `stage2` already checked positions `0` to `3`.
 
 ---
 
-2. Pega `input[i]`
+2. Grab `input[i]`
 ```asm
 mov eax, DWORD PTR [rbp-0x8]
 movsxd rdx, eax
@@ -584,31 +585,31 @@ add rax, rdx
 movzx eax, BYTE PTR [rax]
 movsx eax, al
 ```
-Aqui ele calcula:
+Here it calculates:
 ```
 input[i]
 ```
-Como `i` começa em 4:
+Since `i` starts at 4:
 ```
 input[4]
 input[5]
 input[6]
 ...
 ```
-`movzx` pega o caractere como ***1 byte***, e `movsx` transforma esse byte em um inteiro com sinal.
+`movzx` grabs the character as ***1 byte***, and `movsx` turns that byte into a signed integer.
 
-Na pratica, para caracteres ASCII normais, podemos pensar em simplesmente:
+In practice, for normal ASCII characters, we can just think of it as:
 ```c
 int value = input[i];
 ```
 
 ---
 
-3.  Soma o caractere
+3. Adds the character
 ```asm
 add DWORD PTR [rbp-0x4], eax
 ```
-Adiciona o valor ASCII a variavel `sum`:
+Adds the ASCII value to the variable `sum`:
 ```c
 sum += input[i];
 ```
@@ -621,15 +622,15 @@ Ex:
 
 ---
 
-4. Incrementando o contador
+4. Incrementing the counter
 ```asm
 add DWORD PTR [rbp-0x8], 0x1
 ```
-E:
+And:
 ```c
 i++;
 ```
-Então o loop vai processar:
+So the loop will process:
 ```
 i = 4
 i = 5
@@ -642,53 +643,53 @@ i = 10
 
 ---
 
-5. Condição do loop
+5. Loop condition
 ```asm
 cmp DWORD PTR [rbp-0x8], 0xa
 jle 0x401200
 ```
-`0xa` em hexadecimal e `10`.
+`0xa` in hexadecimal is `10`.
 
-Enquanto:
+As long as:
 ```
 i <= 10
 ```
-ele continua.
+it keeps going.
 
-Portanto, sao 7 caracteres:
+So, there are 7 characters:
 ```
-input[4] ate input[10]
+input[4] to input[10]
 ```
-Podemos imaginar o loop da seguinte forma:
+We can imagine the loop like this:
 ```c
-for (i = 4; i ,+ 10; i++)
-	sum += input[i];
+for (i = 4; i <= 10; i++)
+    sum += input[i];
 ```
 
 ---
 
-6.  Verifica a soma
+6. Check the sum
 ```asm
 cmp DWORD PTR [rbp-0x4], 0x2c0
 jne 0x40123f
 ```
-`0x2c0` em decimal:
+`0x2c0` in decimal:
 ```
 0x2c0 = 704
 ```
-Entao:
+So:
 ```c
 if (sum != 704)
-	return 0;
+    return 0;
 ```
-Ou seja:
+In other words:
 
-> A soma dos valores ASCII de `input[4]` ate `input[10]` precisa ser 704.
+> The sum of the ASCII values from `input[4]` to `input[10]` needs to be 704.
 
 ---
 
-7. Verifica o ultimo caractere
-	Se a soma estiver correta: 
+7. Check the last character
+If the sum is correct:
 ```asm
 mov rax, QWORD PTR [rbp-0x18]
 add rax, 0xb
@@ -698,40 +699,40 @@ jne 0x40123f
 ```
 `0xb` = 11
 
-Então ele verifica:
+Then it checks:
 ```
 input[11]
 ```
-conta:
-``` 
+counts:
+```
 0x7d = '}'
 ```
-Portanto:
+So:
 ```
 input[11] == '}'
 ```
 
 ---
 
-8. Retorno
-	Se tudo estiver correto:
+8. Return
+If everything is correct:
 ```asm
 mov eax, 0x1
 ```
-Retorna:
+Returns:
 ```
 1
 ```
-Se a soma estiver errada ***ou*** `input[11]` não for `}`.
+If the sum is wrong ***or*** `input[11]` is not `}`.
 ```
 mov eax, 0x0
 ```
-Retornando:
+Returning:
 ```
 0
 ```
 
-***Resumindo***
+***In short***
  ```
  [0] [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11]
   R   E   _   {   ?   ?   ?   ?   ?   ?    ?    }
@@ -741,14 +742,14 @@ Retornando:
  ```
 
 
-Então, juntando com as etapas anteriores, ja sabemos que o formato e:
+So, putting this together with the previous steps, we already know that the format is:
 
 ```
 RE_{???????}
 ```
-onde os ***7*** precisam ter soma ASCII = 704, e o ultimo caractere e `}`.
+where the ***7*** need to have an ASCII sum = 704, and the last character is `}`.
 
-Neste caso utilizei : `d d d d d d h` . Explicacao:
+In this case I used: `d d d d d d h`. Explanation:
 ```
 d = 100
 h = 104
@@ -756,7 +757,7 @@ h = 104
 6 * 100 + 104 = 704
 ```
 
-Executando o `crackme3` fornecendo a string correta:
+Running `crackme3` by providing the correct string:
 
 ```bash
 ./crackme3 

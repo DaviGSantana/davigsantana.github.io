@@ -858,3 +858,108 @@ R: 0xFFFFFFF1
 The malware retrieves a directory and appends a suffix to it. What is the full path it constructs in code?
 ```
 
+The malware to retrieve a directory and add a suffix to it uses the `SHGetSpecialFolderPathA` function, which gets the path of a special folder identified by its CSIDL.
+
+```c++
+BOOL SHGetSpecialFolderPathA(
+        HWND  hwnd,
+  [out] LPSTR pszPath,
+  [in]  int   csidl,
+  [in]  BOOL  fCreate
+);
+```
+
+Below is the use of this function by the malware, where we have the important points:
+
+```asm
+xor r9d, r9d         ; fCreate = 0
+lea r8d, [r9+1Ch]    ; csidl = R9 + 0x1C = 0x1C
+```
+
+Since `R9D` was cleared right before, the `lea r8d, [r9+1Ch]` simply results in `csidl=0x1C`.
+
+Checking the CSIDL constants table (Shl0bj.h):
+```
+0x1C = CSIDL_LOCAL_APPDATA → %LOCALAPPDATA%
+```
+
+![alt text](SilentSerpent/wqa2NS5.png)
+
+Ok, we have the directory recovered by the malware, let's identify the suffix we have right after the call.
+
+![alt text](SilentSerpent/3k2u52I.png)
+
+Constant: `dword_7FF991D03964 = 74656E5Ch`.
+
+result: `\net`
+
+R: %LOCALAPPDATA%\net
+
+---
+
+## 4.1.10 Question 10
+```
+What is the duration of the initial 'Sleep' call (in seconds) used before the loop begins?
+```
+
+After the malware recovers the directory, it uses the `Sleep` function, passing the first argument in the ecx register with the value 7530h, converting to decimal -> 30 -> 30 ms.
+
+![alt text](SilentSerpent/Oj365On.png)
+
+---
+
+## 4.1.11 Question 11
+```
+Once the file was read, it decrypt the payload implements the logic of a well-known stream cipher. What is the name of this cipher?
+```
+
+R: RC4
+
+---
+
+## 4.1.12 Question 12
+```
+What are the first two specific hexadecimal values (magic bytes) checked in sequence to confirm the file in memory is a valid PE file for loading?
+```
+
+He checks the bytes of the PE header of the decrypted file. `MZ/PE`
+
+```
+MZ -> 4D5A -> 0x5A4D
+PE -> 5045 -> 0x4550
+```
+
+R: 0x5A4D, 0x4550
+
+---
+
+## 4.1.13 Question 13
+```
+What is the name of this specific execution method, which avoids using the standard operating system loader?
+```
+
+R: Reflective DLL Injection
+
+---
+
+## 4.1.14 Question 14
+```
+If the Loader is unable to allocate the required memory for the DLL (even after a second attempt), what is the Windows system error it sets before returning an error?
+```
+
+R: ERROR_OUTOFMEMORY
+
+---
+
+## 4.1.15 Question 15
+```
+After successfully executing the payload, what is the API function used to remove the final evidence from the disk?
+```
+
+He uses the API function `DeleteFileA`, passing the name of the file to be deleted as an argument.
+
+![alt text](SilentSerpent/ZNQImk5.png)
+
+---
+
+## 4.1.16 Question 16
