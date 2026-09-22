@@ -6,7 +6,7 @@ categories:
   - Practical Malware Analysis
 tags:
   - Book
-cover: pma-chapter15/cover.jpg
+cover: pma-chapter16/cover.jpg
 ---
 
 ## Lab 16-01

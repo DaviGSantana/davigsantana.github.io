@@ -195,11 +195,9 @@ Using Burp Suite to automate the requests and vary the code sent in the correspo
 
 Burp Suite will perform up to 1,000 attempts, testing every possible combination until it finds the code accepted by the system, allowing the authentication process to complete.
 
+After providing the correct code, we can access and view:
 
-
-
-
-
+---
 
 
 
