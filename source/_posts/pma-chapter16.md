@@ -9,10 +9,10 @@ tags:
 cover: pma-chapter16/cover.jpg
 ---
 
-## Lab 16-01
-
 Analyze the malware found in Lab16-01.exe using a debugger. This is the 
 same malware as Lab09-01.exe, with added anti-debugging techniques.
+
+## Lab 16-01
 
 ### Question 1
 ```

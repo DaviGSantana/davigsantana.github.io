@@ -1,7 +1,7 @@
 ---
 title: Practical Malware Analysis - Anti-VM
 date: 2026-09-21 16:00:00
-description: Neste post, continuo meus estudos do livro "Practical Malware Analysis" e começo a resolver o Lab 17, sobre técnicas anti-VM.
+description: In this post, I continue my study of the book *Practical Malware Analysis* and begin working on Lab 17, which covers anti-VM techniques.
 categories:
   - Practical Malware Analysis
 tags:
@@ -9,27 +9,28 @@ tags:
 cover: pma-chapter17/cover.jpg
 ---
 
-## Introdução
-
-O Capítulo 17 do livro trata de **técnicas anti-VM**: formas que o malware usa pra detectar se está rodando dentro de uma máquina virtual e, ao detectar, mudar de comportamento (geralmente se auto-deletando ou encerrando) pra dificultar a análise. Os dois labs abaixo trazem exemplos reais dessas técnicas em ação.
+Chapter 17 of the book covers **anti-VM techniques**: methods malware uses to detect whether it is running inside a virtual machine and, upon detection, alter its behavior (typically by self-deleting or terminating) to hinder analysis. The two labs below present real-world examples of these techniques in action.
 
 ---
 
 ## Lab 17-01
 
-Analisar o malware `Lab17-01.exe` dentro de uma VM. É a mesma amostra do `Lab07-01.exe`, agora com técnicas anti-VMware adicionadas.
+Analyze the malware `Lab17-01.exe` inside a VM. It is the same sample as `Lab07-01.exe`, but now with added anti-VMware techniques.
 
-> **Nota do livro**: as técnicas anti-VM encontradas neste lab podem não funcionar no seu ambiente — depende de qual hipervisor você está usando (VMware, VirtualBox etc.), já que a maioria dessas checagens é feita especificamente contra assinaturas do VMware.
+> **Book Note**: The anti-VM techniques found in this lab might not work in your environment—it depends on which hypervisor you are using (VMware, VirtualBox, etc.), as most of these checks specifically target VMware signatures.
 
-### Questão 1 — Quais técnicas anti-VM o malware usa?
+### Question 1
+```
+What anti-VM techniques does the malware use?
+```
 
-O malware usa **3 instruções x86 "vulneráveis"** — instruções que não são privilegiadas e, por isso, podem ser executadas direto do user mode pra consultar estruturas internas do processador que se comportam de forma diferente dentro de uma VM. São elas:
+The malware uses **3 "vulnerable" x86 instructions**—instructions that are not privileged and can therefore be executed directly from user mode to query internal processor structures that behave differently inside a VM. They are:
 
-| Endereço | Instrução | Técnica |
+| Address | Instruction | Technique |
 |---|---|---|
 | `0x00401121` | `sldt` | No Pill |
 | `0x004011B5` | `sidt` | Red Pill |
-| `0x00401204` | `str` | Checagem via Task Register |
+| `0x00401204` | `str` | Task Register check |
 
 ![alt text](pma-chapter17/8i0aAzA.png)
 
@@ -37,59 +38,62 @@ O malware usa **3 instruções x86 "vulneráveis"** — instruções que não s�
 
 ---
 
-### Questão 2 — Rodando o script `findAntiVM.py` do Capítulo 17
+### Question 2
+```
+Running the `findAntiVM.py` script from Chapter 17
+```
 
-*(Questão que depende da versão comercial do IDA Pro — sem acesso a ela no momento, deixo em aberto pra revisar depois.)*
+*(This question depends on the commercial version of IDA Pro—since I don't have access to it at the moment, I am leaving this open to review later.)*
 
 ---
 
-### Questão 3 — O que acontece quando cada técnica anti-VM tem sucesso?
+### Question 3
+```
+What happens when each anti-VM technique succeeds?
+```
 
-#### `sidt` — Técnica Red Pill
+#### `sidt` — Red Pill Technique
 
-A instrução `SIDT` só é executada em `0x4011B5` **se não existir** um mutex chamado `HGL345` no sistema — ou seja, essa checagem é a primeira etapa de uma cadeia de verificações.
+The `SIDT` instruction executes at `0x4011B5` **only if** a mutex named `HGL345` does not exist on the system—meaning this check is the first step in a chain of verifications.
 
-**Como funciona, passo a passo:**
-1. `SIDT` captura a **IDT** (Interrupt Descriptor Table) inteira — uma estrutura de **6 bytes**.
-2. O malware pega os **2 bytes menos significativos** dela, usando um deslocamento (offset) de `0x2`.
-3. Pra chegar até o offset `0x5` — onde mora o byte que denuncia o VMware (o valor `0xFF`) — o código desloca **18 bits** (0x12) pra direita. Como cada byte tem 8 bits, isso equivale a andar **mais 3 bytes** a partir de onde já estava, resultando exatamente no offset `0x5`.
-4. Esse byte final é comparado com `0xFF` — se bater, a VM foi detectada.
+**How ​​it works, step-by-step:**
+1. `SIDT` captures the entire **IDT** (Interrupt Descriptor Table)—a **6-byte** structure.
+2. The malware takes the **2 least significant bytes** of it, using an offset of `0x2`.
+3. To reach offset `0x5`—where the byte revealing VMware (the value `0xFF`) is located—the code shifts **18 bits** (0x12) to the right. Since each byte consists of 8 bits, this is equivalent to moving **3 additional bytes** from the current position, landing exactly on offset `0x5`.
+4. This final byte is compared against `0xFF`—if they match, the VM has been detected.
 
-> 💡 Essa é a técnica **Red Pill**, vista na teoria do capítulo: o valor no 5º byte da IDT costuma ser `0xFF` quando a VM realoca essa tabela, algo que não acontece em hardware físico.
+> 💡 This is the **Red Pill** technique discussed in the chapter's theory: the value of the 5th byte of the IDT is typically `0xFF` when the VM relocates this table, something that does not occur on physical hardware.
 
 ![alt text](pma-chapter17/7j0rGF5.png)
 
-Se essa verificação **tiver sucesso** (ou seja, detectar a VM), o código chama `sub_401000` — a rotina responsável por fazer o malware **se auto-deletar**.
+If this check **succeeds** (i.e., detects the VM), the code calls `sub_401000`—the routine responsible for the malware **deleting itself**. ![alt text](pma-chapter17/YpO9XeB.png)
 
-![alt text](pma-chapter17/YpO9XeB.png)
+#### `str` — Check via Task Register
 
-#### `str` — Checagem via Task Register
+The `STR` instruction executes at `0x401204` **only if the previous check (`sidt`) has already passed**—meaning it is the second step in the chain.
 
-A instrução `STR` só roda em `0x401204` **se a verificação anterior (`sidt`) já tiver sido aprovada** — ou seja, é a segunda etapa da cadeia.
-
-**Como funciona:**
-1. `STR` recupera o **Task State Segment (TSS)** e guarda o resultado em `var_418`.
-2. O código checa se o **primeiro byte** retornado é `0`.
-3. Se for, faz uma **segunda checagem**, comparando o **segundo byte** com `0x40`.
+**How ​​it works:**
+1. `STR` retrieves the **Task State Segment (TSS)** and stores the result in `var_418`.
+2. The code checks if the **first byte** returned is `0`.
+3. If it is, it performs a **second check**, comparing the **second byte** with `0x40`.
 
 ![alt text](pma-chapter17/B60kuGU.png)
 
-Quando essa checagem também tem sucesso, o fluxo chega em `loc_401336`, que **inevitavelmente** chama `sub_401000` de novo — reforçando a auto-deleção.
+When this check also succeeds, the execution flow reaches `loc_401336`, which **inevitably** calls `sub_401000` again—reinforcing the self-deletion mechanism.
 
-#### `sldt` — Técnica No Pill
+#### `sldt` — No-Pill Technique
 
-A instrução `SLDT` só roda em `0x401121` se as checagens anteriores já tiverem passado. Ela fica guardada num offset diferente dos outros, porque essa checagem específica acontece dentro de uma sub-rotina separada, `sub_401100` — chamada em `0x4012D1`, **depois** que o malware já criou o serviço malicioso.
+The `SLDT` instruction executes at `0x401121` only if the preceding checks have passed. It is stored at a different offset than the others because this specific check occurs within a separate subroutine, `sub_401100`—called at `0x4012D1`, **after** the malware has already created the malicious service.
 
-**Analisando `sub_401100`:**
-1. O valor `0x0DDCCBBAA` é atribuído a `EAX` e guardado em `[ebp+var_8]` — esse valor é usado só como inicialização e nunca mais aparece de novo.
-2. A operação `SLDT` roda, e o resultado cai nessa mesma posição de memória.
-3. Esse resultado é então movido pra `[ebp+var_C]`, depois de volta pra `EAX`, que é o valor **retornado** por essa sub-rotina.
+**Analyzing `sub_401100`:**
+1. The value `0x0DDCCBBAA` is assigned to `EAX` and stored at `[ebp+var_8]`—this value serves only as an initialization step and never appears again.
+2. The `SLDT` operation executes, and the result is stored in that same memory location.
+3. This result is then moved to `[ebp+var_C]` and subsequently back to `EAX`, which is the value **returned** by this subroutine.
 
 ![alt text](pma-chapter17/Shn2kE.png)
 
-Voltando pra quem **chama** `sub_401100`: o retorno é comparado contra o valor `0x0DDCC0000`.
-- Se **não bater**, ocorre um salto que faz o malware **terminar** a execução.
-- Se **bater** (indicando VM), o código entra num **loop infinito** criando repetidamente uma nova thread com o mesmo `StartAddress` — o mesmo comportamento de **negação de serviço** (esgotamento de recursos) já visto rodando o `Lab07-01.exe` sem essas proteções.
+Returning to the caller of `sub_401100`: the return value is compared against `0x0DDCC0000`.
+- If they **do not match**, a jump occurs, causing the malware to **terminate** execution. - If it **triggers** (indicating a VM), the code enters an **infinite loop**, repeatedly creating a new thread with the same `StartAddress`—the same **denial-of-service** behavior (resource exhaustion) observed when running `Lab07-01.exe` without these protections.
 
 ![alt text](pma-chapter17/XbwpqMh.png)
 
@@ -97,57 +101,75 @@ Voltando pra quem **chama** `sub_401100`: o retorno é comparado contra o valor 
 
 ---
 
-### Questão 4 — Quais dessas técnicas funcionam contra a sua VM?
+### Question 4
+```
+Which of these techniques work against your VM?
+```
 
-Os valores comparados pelo malware são, em grande parte, assinaturas específicas do **VMware** — como estou rodando a análise em **VirtualBox**, boa parte dessas checagens não se aplica diretamente ao meu ambiente (os valores de referência que o malware espera encontrar são de outro hipervisor).
-
----
-
-### Questão 5 — Por que cada técnica funciona ou falha?
-
-*(A revisar com mais detalhe — depende de comparar, instrução por instrução, os valores reais retornados pelo VirtualBox contra os valores que o malware espera do VMware.)*
+The values ​​compared by the malware are largely specific **VMware** signatures—since I am running the analysis in **VirtualBox**, many of these checks do not directly apply to my environment (the reference values ​​the malware expects to find belong to a different hypervisor).
 
 ---
 
-### Questão 6 — Como desativar essas técnicas e fazer o malware rodar normalmente?
+### Question 5 
+```
+Why does each technique work or fail?
+```
 
-A forma mais simples é **"NOPar"** as instruções associadas às checagens (`sidt`, `str`, `sldt`), garantindo que só os jumps necessários pro fluxo normal sejam tomados — ou, alternativamente, modificar as flags de salto diretamente num debugger, forçando o caminho que **não** leva à detecção.
+*(To be reviewed in greater detail—this depends on comparing, instruction by instruction, the actual values ​​returned by VirtualBox against the values ​​the malware expects from VMware.)*
+
+---
+
+### Question 6
+```
+How can you disable these techniques and make the malware run normally?
+```
+
+The simplest way is to **"NOP out"** the instructions associated with the checks (`sidt`, `str`, `sldt`), ensuring that only the jumps necessary for normal execution flow are taken—or, alternatively, modifying the jump flags directly in a debugger to force the path that does **not** lead to detection.
 
 ---
 
 ## Lab 17-02
 
-Analisar o malware `Lab17-02.dll` dentro de uma VM. Depois de responder a primeira questão, o exercício pede pra rodar os exports de instalação via `rundll32.exe` e monitorar com uma ferramenta como o Process Monitor:
+Analyze the malware `Lab17-02.dll` inside a VM. After answering the first question, the exercise asks you to run the installation exports via `rundll32.exe` and monitor the process using a tool like Process Monitor:
 
 ```rundll32.exe Lab17-02.dll,InstallRT (or InstallSA/InstallSB)```
 
 
-### Questão 1 — Quais são os exports dessa DLL?
+### Question 1
+```
+What are the exports of this DLL?
+```
 
-Não consegui acesso ao VMware pra este lab — vou tentar responder o máximo possível das outras questões com base no comportamento observado.
+I was unable to access VMware for this lab—I will try to answer as many of the other questions as possible based on the observed behavior.
 
-É possível ver, além dos exports abaixo, que o malware importa um número grande de funções de bibliotecas diferentes.
+In addition to the exports listed below, it is evident that the malware imports a large number of functions from various libraries.
 
 ![alt text](pma-chapter17/Qvdps96.png)
 
 ---
 
-### Questão 2 — O que acontece após a tentativa de instalação via `rundll32.exe`?
+### Question 2 
+```
+What happens after the installation attempt via `rundll32.exe`?
+```
 
-Rodando no PowerShell:
+Running in PowerShell:
 
 ```powershell
 rundll32.exe Lab17-02.dll,InstallRT
 ```
 
-Aparentemente **nada acontece** na tela — então parti pra analisar com o Process Monitor.
+Apparently, **nothing happens** on the screen — so I proceeded to analyze it using Process Monitor.
 
 ![alt text](pma-chapter17/yjBbtO9.png)
 
-Um arquivo de log é criado, e dentro dele é possível ver que o malware tenta fazer uma **injeção de processo** no `iexplore.exe` — mas a tentativa **falha**, porque esse processo não é encontrado no sistema (não tenho o Internet Explorer instalado no ambiente de teste).
+A log file is created, and within it, one can see that the malware attempts **process injection** into `iexplore.exe` — but the attempt **fails** because that process is not found on the system (I do not have Internet Explorer installed in the test environment).
 
 ---
 
-### Questão 3 — Quais arquivos são criados e o que eles contêm?
+### Question 3
+``` 
+Which files are created and what do they contain?
+```
 
-É criado um arquivo **`.bat`** contendo código de auto-deleção, além de um arquivo chamado **`xinstall.log`**, contendo a string: Found Virtual Machine, Install Cancel.
+A **`.bat`** file containing self-deletion code is created, along with a file named **`xinstall.log`** containing the string: Found Virtual Machine, Install Cancel.
