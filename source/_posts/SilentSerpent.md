@@ -960,6 +960,101 @@ He uses the API function `DeleteFileA`, passing the name of the file to be delet
 
 ![alt text](SilentSerpent/ZNQImk5.png)
 
+R: DeleteFileA
+
 ---
 
 ## 4.1.16 Question 16
+```
+If the payload file is not found, how long (in seconds) does the malware wait inside its infinite loop before checking for the file again?
+```
+
+No final do loop, caso o payload nao for encontrado, o malware `sleep` 10s.
+
+2710h -> 10.000 milissegundos -> 10s
+
+![alt text](SilentSerpent/bWMZEfW.png)
+
+R: 10
+
+---
+
+## 4.1.17 Question 17
+```
+What is the filename the malware uses as a flag to check for its own presence on the disk?
+```
+
+O malware inicializa seu ambiente de trabalho resolvendo o caminho para o diretório **Local AppData** do usuário atual por meio de `SHGetSpecialFolderPathA(CSIDL 0x1c)`. A partir desse diretório, ele constrói os caminhos absolutos utilizados durante a execução.
+
+Em seguida, o malware constrói dois caminhos principais: **`notepad.log`**, utilizado para verificar a presença ou o estado da carga principal, e **`notepad.tmp`**, utilizado como arquivo temporário durante o fluxo de execução.
+
+A lógica crítica ocorre na instrução `if`, na qual o malware verifica o status de **`notepad.log`** no disco.
+
+**Condição:**
+
+`if (__fpecode(...) != 0)`
+
+Quando a condição é verdadeira, isso indica que **`notepad.log` está ausente ou não pôde ser acessado ou validado corretamente**.
+
+Se `notepad.log` estiver ausente ou inválido, o malware entra na fase de **Download/Execução**. Nesse fluxo, ele constrói o caminho para o arquivo de configuração **`user.txt`**, tenta abrir esse arquivo e, a partir dessa operação, desencadeia as rotinas subsequentes de **descriptografia e download** analisadas nas seções seguintes.
+
+Caso **`notepad.log` já exista e seja considerado válido**, a condição acima não é satisfeita. Nesse cenário, o código segue para o bloco `else`, no qual executa a **carga útil local diretamente**, sem repetir o fluxo de download.
+
+Esse comportamento está relacionado à lógica de **persistência/execução offline** descrita na análise.
+
+![alt text](SilentSerpent/7uNGFmv.png)
+
+R: notepad.log
+
+---
+
+## 4.1.18 Question 18
+```
+Based on the decryption logic for 'user.txt', what is the 16-byte hexadecimal key used as the Passphrase/Key?
+```
+
+Após configurar o ambiente, o malware verifica a existência de `%LOCALAPPDATA%\user.txt` . Este arquivo parece conter dados criptografados (URLs).
+
+Antes de ler o arquivo, o malware determina seu tamanho utilizando `sub_7ffd55b93df0`, que move o ponteiro para o final com `_lseek_nolock(..., FILE_END)` para obter o tamanho e depois o retorna ao início com `_lseek_nolock(..., FILE_BEGIN)`.
+
+A função `sub_7ffd55b94400` realiza a cópia dos dados, funcionando de forma equivalente a `memmove`/`memcpy`.
+
+![alt text](SilentSerpent/pRh2OAm.png)
+
+A função `sub_7ffd55b911f0` processa o conteúdo de `user.txt`. Os primeiros **16 bytes (`0x10`)** são tratados como a chave ou material de chave RC4, enquanto o restante do arquivo é copiado para um novo buffer e processado pela rotina `sub_7ffd55b91160`, que remove bytes nulos finais e chama a rotina de descriptografia **RC4 (`sub_7ffd55b93b20`)**.
+
+A estrutura identificada é:
+
+- **Offset `0x00–0x0F`**: chave RC4 de 16 bytes.
+- **Offset `0x10–EOF`**: payload criptografado.
+
+![alt text](SilentSerpent/d4PQphi.png)
+
+A lógica foi validada manualmente utilizando o **CyberChef**, aplicando os primeiros 16 bytes como chave em formato Hex e o restante como entrada do RC4. A descriptografia revelou com sucesso uma **lista de URLs**.
+
+```
+https://drive.google.com/uc?export=download&id=1RSeJEYgqvajlAeEx40-6BZJgmdV23S33 -> main64.log
+https://drive.google.com/uc?export=download&id=1PTs95g2gr6dIuO2RqErgGutQZv2Y0g3Y -> net64.log
+https://drive.google.com/uc?export=download&id=1EkyeoSdhvGqcEpZkqBUzXnJYPLka7zJc -> app64.log
+
+```
+
+R: b6f2945b6ac1f9a42256423834776d16
+
+---
+
+## 4.1.19 Question 19
+```
+How many unique download URLs are listed in the decrypted file ('user.txt')?
+```
+
+R: 3
+
+---
+
+## 4.1.20 Question 20
+```
+What is the specific ASCII character (in hexadecimal) that the malware uses as a delimiter to split the URLs from the decrypted configuration file?
+```
+
+R: 0x0D
