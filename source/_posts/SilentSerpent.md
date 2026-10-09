@@ -1058,3 +1058,107 @@ What is the specific ASCII character (in hexadecimal) that the malware uses as a
 ```
 
 R: 0x0D
+
+---
+
+## 4.1.21 Question 21
+```
+Before downloading each URL, the malware clears the Windows Internet Cache for that specific URL. Which Windows API function is used to clear the cache?
+```
+
+Before the malware calls the function `sub_7FFD978918A0` (the function where the malware accesses and downloads content from URLs), it uses a call to the function `DeleteUrlCacheEntryA` to clear Windows' internet cache.
+
+![alt text](SilentSerpent/7zoweNR.png)
+
+R: DeleteUrlCacheEntryA
+
+---
+
+## 4.1.22 Question 22
+```
+What is the full hardcoded User-Agent string used by the malware's download function?
+```
+
+We can see the user-agent being passed in the call to the `InternetOpenA` function.
+
+![alt text](SilentSerpent/YBpevU7.png)
+
+R: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36
+
+---
+
+## 4.1.23 Question 23
+```
+The URLs are downloaded and saved into disk using new filenames. What are the three final filenames used for the downloaded payloads?
+```
+
+To be able to see the names of the files that are saved after the payloads are downloaded, we can first analyze the code before the calls to the function `sub_7FFD978918A0`, which, as we know, is where the payloads are downloaded.
+
+![alt text](SilentSerpent/DVBI4wz.png)
+
+We have 3 interesting calls, let's go through them one by one. But right off the bat, we can see something in common in the 3 code blocks of each call: there's a file name, where we can possibly assume that it will be the file where the payload will be saved on disk.
+
+![alt text](SilentSerpent/AHc1DuI.png)
+
+![alt text](SilentSerpent/UzCvpSV.png)
+
+![alt text](SilentSerpent/vgHI0lz.png)
+
+R: app, net, notepad.log
+
+---
+
+## 4.1.24 Question 24
+```
+Which Windows API is used to take a snapshot of the currently running processes?
+```
+
+The malware uses the `CreateToolhelp32Snapshot` function to look for the chrome.exe process running on the system, where it possibly injects malicious code into it.
+
+![alt text](SilentSerpent/SnLEb1T.png)
+
+R: CreateToolhelp32Snapshot
+
+---
+
+## 4.1.25 Question 25
+```
+The first downloaded payload is designed to perform process injection. Which specific web browser executable is the malware designed to search for and target for this injection?
+```
+
+As seen in the previous question, it searches for the Chrome browser process and injects.
+
+R: chrome.exe
+
+---
+
+## 4.1.26 Question 26
+```
+What type of process information is queried using NtQueryInformationProcess?
+```
+
+After the `OpenProcess` call, if the browser is found, in the next block it makes a call to `sub_7FFD97891260`.
+
+![alt text](SilentSerpent/z6mxaT0.png)
+
+Inside the function, we see `NtQueryInformationProcess` being passed to the rbp register, where in the block below the call `call rbp` is made.
+
+![alt text](SilentSerpent/ATxEV9y.png)
+
+The function `NtQueryInformationProcess` has the following structure:
+
+```c++
+NTSTATUS NtQueryInformationProcess(
+  HANDLE ProcessHandle,
+  PROCESSINFOCLASS ProcessInformationClass,
+  PVOID ProcessInformation,
+  ULONG ProcessInformationLength,
+  PULONG ReturnLength
+);
+```
+
+Where the type of information is passed in the PROCESSINFOCLASS argument, which in the case of the malware:
+
+![alt text](SilentSerpent/jBLOnIx.png)
+
+
