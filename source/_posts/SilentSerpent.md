@@ -969,9 +969,9 @@ R: DeleteFileA
 If the payload file is not found, how long (in seconds) does the malware wait inside its infinite loop before checking for the file again?
 ```
 
-No final do loop, caso o payload nao for encontrado, o malware `sleep` 10s.
+At the end of the loop, if the payload isn't found, the malware `sleeps` for 10s.
 
-2710h -> 10.000 milissegundos -> 10s
+2710h -> 10.000 milliseconds -> 10s
 
 ![alt text](SilentSerpent/bWMZEfW.png)
 
@@ -984,23 +984,23 @@ R: 10
 What is the filename the malware uses as a flag to check for its own presence on the disk?
 ```
 
-O malware inicializa seu ambiente de trabalho resolvendo o caminho para o diretório **Local AppData** do usuário atual por meio de `SHGetSpecialFolderPathA(CSIDL 0x1c)`. A partir desse diretório, ele constrói os caminhos absolutos utilizados durante a execução.
+The malware initializes its working environment by resolving the path to the current user's **Local AppData** directory via `SHGetSpecialFolderPathA(CSIDL 0x1c)`. From this directory, it constructs the absolute paths used during execution.
 
-Em seguida, o malware constrói dois caminhos principais: **`notepad.log`**, utilizado para verificar a presença ou o estado da carga principal, e **`notepad.tmp`**, utilizado como arquivo temporário durante o fluxo de execução.
+Next, the malware constructs two key paths: **`notepad.log`**, used to check for the presence or status of the main payload, and **`notepad.tmp`**, used as a temporary file during the execution flow.
 
-A lógica crítica ocorre na instrução `if`, na qual o malware verifica o status de **`notepad.log`** no disco.
+The critical logic occurs within the `if` statement, where the malware checks the status of **`notepad.log`** on the disk.
 
-**Condição:**
+**Condition:**
 
 `if (__fpecode(...) != 0)`
 
-Quando a condição é verdadeira, isso indica que **`notepad.log` está ausente ou não pôde ser acessado ou validado corretamente**.
+When this condition evaluates to true, it indicates that **`notepad.log` is missing or could not be accessed or validated correctly**.
 
-Se `notepad.log` estiver ausente ou inválido, o malware entra na fase de **Download/Execução**. Nesse fluxo, ele constrói o caminho para o arquivo de configuração **`user.txt`**, tenta abrir esse arquivo e, a partir dessa operação, desencadeia as rotinas subsequentes de **descriptografia e download** analisadas nas seções seguintes.
+If `notepad.log` is missing or invalid, the malware enters the **Download/Execution** phase. In this flow, it constructs the path to the configuration file **`user.txt`**, attempts to open it, and—based on this operation—triggers the subsequent **decryption and download** routines analyzed in the following sections.
 
-Caso **`notepad.log` já exista e seja considerado válido**, a condição acima não é satisfeita. Nesse cenário, o código segue para o bloco `else`, no qual executa a **carga útil local diretamente**, sem repetir o fluxo de download.
+If **`notepad.log` already exists and is considered valid**, the condition above is not met. In this scenario, the code proceeds to the `else` block, where it executes the **local payload directly** without repeating the download flow.
 
-Esse comportamento está relacionado à lógica de **persistência/execução offline** descrita na análise.
+This behavior is linked to the **persistence/offline execution** logic described in the analysis.
 
 ![alt text](SilentSerpent/7uNGFmv.png)
 
@@ -1013,24 +1013,24 @@ R: notepad.log
 Based on the decryption logic for 'user.txt', what is the 16-byte hexadecimal key used as the Passphrase/Key?
 ```
 
-Após configurar o ambiente, o malware verifica a existência de `%LOCALAPPDATA%\user.txt` . Este arquivo parece conter dados criptografados (URLs).
+After setting up the environment, the malware checks for the existence of `%LOCALAPPDATA%\user.txt`. This file appears to contain encrypted data (URLs).
 
-Antes de ler o arquivo, o malware determina seu tamanho utilizando `sub_7ffd55b93df0`, que move o ponteiro para o final com `_lseek_nolock(..., FILE_END)` para obter o tamanho e depois o retorna ao início com `_lseek_nolock(..., FILE_BEGIN)`.
+Before reading the file, the malware determines its size using `sub_7ffd55b93df0`, which moves the pointer to the end using `_lseek_nolock(..., FILE_END)` to obtain the size and then returns it to the beginning using `_lseek_nolock(..., FILE_BEGIN)`.
 
-A função `sub_7ffd55b94400` realiza a cópia dos dados, funcionando de forma equivalente a `memmove`/`memcpy`.
+The function `sub_7ffd55b94400` copies the data, functioning similarly to `memmove`/`memcpy`.
 
 ![alt text](SilentSerpent/pRh2OAm.png)
 
-A função `sub_7ffd55b911f0` processa o conteúdo de `user.txt`. Os primeiros **16 bytes (`0x10`)** são tratados como a chave ou material de chave RC4, enquanto o restante do arquivo é copiado para um novo buffer e processado pela rotina `sub_7ffd55b91160`, que remove bytes nulos finais e chama a rotina de descriptografia **RC4 (`sub_7ffd55b93b20`)**.
+The function `sub_7ffd55b911f0` processes the contents of `user.txt`. The first **16 bytes (`0x10`)** are treated as the RC4 key or key material, while the remainder of the file is copied to a new buffer and processed by the routine `sub_7ffd55b91160`, which removes trailing null bytes and calls the **RC4** decryption routine (`sub_7ffd55b93b20`).
 
-A estrutura identificada é:
+The identified structure is:
 
-- **Offset `0x00–0x0F`**: chave RC4 de 16 bytes.
-- **Offset `0x10–EOF`**: payload criptografado.
+- **Offset `0x00–0x0F`**: 16-byte RC4 key.
+- **Offset `0x10–EOF`**: encrypted payload.
 
 ![alt text](SilentSerpent/d4PQphi.png)
 
-A lógica foi validada manualmente utilizando o **CyberChef**, aplicando os primeiros 16 bytes como chave em formato Hex e o restante como entrada do RC4. A descriptografia revelou com sucesso uma **lista de URLs**.
+The logic was manually validated using **CyberChef** by applying the first 16 bytes as the key in Hex format and the remainder as the RC4 input. Decryption successfully revealed a **list of URLs**.
 
 ```
 https://drive.google.com/uc?export=download&id=1RSeJEYgqvajlAeEx40-6BZJgmdV23S33 -> main64.log
@@ -1161,4 +1161,38 @@ Where the type of information is passed in the PROCESSINFOCLASS argument, which 
 
 ![alt text](SilentSerpent/jBLOnIx.png)
 
+The `ProcessInformationClass` argument is set to `0x3C` (60 decimal), which corresponds to `ProcessCommandLineInformation`. This queries information about the process's command line.
+
+R: ProcessCommandLineInformation
+
+---
+
+## 4.1.27 Question 27
+```
+What specific Chrome command-line argument does the malware search for to identify a suitable injection target?
+```
+
+![alt text](SilentSerpent/rHTeS25.png)
+
+R: --type=
+
+---
+
+## 4.1.28 Question 28
+```
+Which Windows security privilege does the malware attempt to acquire before performing the injection?
+```
+
+`sub_7FFD978915D0` is where the malware attempts to obtain system privileges. The malware uses `LookupPrivilegeValueA` to retrieve the Locally Unique Identifier (LUID) used on a specified system to locally represent the name of the specified privilege, passing `SeDebugPrivilege`: Debug and adjust the memory of any process, bypassing the process's DACL. User Right: Debug programs.
+
+![alt text](SilentSerpent/0dvoXF1.png)
+
+R: SeDebugPrivilege
+
+---
+
+## 4.1.29 Question 29
+```
+What is the name of the exported function within the first payload that is executed.?
+```
 
