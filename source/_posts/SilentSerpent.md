@@ -1196,3 +1196,79 @@ R: SeDebugPrivilege
 What is the name of the exported function within the first payload that is executed.?
 ```
 
+R: ReflectiveLoader
+
+---
+
+## 4.1.30 Question 30
+```
+The remote injection function uses three core API calls in sequence. Name the final API used to execute the malicious code inside the target process.
+```
+
+To run malicious code inside a process, the malware follows this flow: It defines the target process, allocates memory in the target process (VirtualAllocEx), writes the payload to that allocated memory (WriteProcessMemory), and finally creates a thread in the target process to execute the injected code (CreateRemoteThread).
+
+![alt text](SilentSerpent/Oab6aXA.png)
+
+R: CreateRemoteThread
+
+---
+
+## 4.1.31 Question 31
+```
+The second downloaded payload is used as a transient utility. What is the file this transient payload is responsible for dropping?
+```
+
+Afterwards, the main loader waits for the appearance of `micro.zip` on the disk. When the file is detected, the flow moves on to the next step.
+
+![alt text](SilentSerpent/VrnJYRg.png)
+
+R: micro.zip
+
+---
+
+## 4.1.32 Question 32
+```
+After the second payload execution and before starting the final download, the malware introduces a short delay. How long (in seconds) is this sleep/delay before the third payload download?
+```
+
+In the previous question we can see 3E8h being passed to the `Sleep` function, which in decimal -> 10s.
+
+R: 10
+
+---
+
+## 4.1.33 Question 33
+```
+In the self-update mechanism, what is the filename that contains the *new* version of the main payload?
+```
+
+![alt text](SilentSerpent/6kDy0xa.png)
+
+R: notepad.tmp
+
+---
+
+## 4.1.34 Question 34
+```
+Which Windows API is used to replace the old main payload with the content of the update file?
+```
+
+A API e `CopyFileA`. Ela copia o conteudo do arquivo de atualizacao (notepad.tmp) para substituir o payload principal (notepad.log), usando `FALSE` no terceiro parametro para permitir a sobrescrita do arquivo existente.
+
+![alt text](SilentSerpent/5dJLyge.png)
+
+R: CopyFileA
+
+---
+
+## 4.1.35 Question 35
+```
+If the main payload is found on the disk, what is the fileless execution flag that is passed to the loader to ensure the malware remains resident in memory?
+```
+
+R:0
+
+# Harvest Moon
+
+> **Scenario:** Multiple modules target sensitive data across the system. Dissect each component and catalog the collection capabilities.
+
